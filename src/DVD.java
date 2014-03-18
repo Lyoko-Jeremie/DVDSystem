@@ -47,7 +47,8 @@ public class DVD {
 	/**
 	 * 价格
 	 */
-	private double price;
+	private double buyPrice;
+	private double rentPrice;
 	
 	// 重构时添加修改途径即可实现管理员设置
 	/**
@@ -71,7 +72,8 @@ public class DVD {
 	 * sell = false<br>
 	 * rent =  false<br>
 	 * rentAmount = 0<br>
-	 * price = 0<br>
+	 * buyPrice = 0<br>
+	 * rentPrice = 0<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 */
@@ -83,7 +85,8 @@ public class DVD {
 		this.sell = false;
 		this.rent =  false;
 		this.rentAmount = 0;
-		this.price = 0;
+		this.buyPrice = 0;
+		this.rentPrice = 0;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
 	}
@@ -93,14 +96,15 @@ public class DVD {
 	 * rentLimit = RENT_LIMIT<br>
 	 * @author Jeremie
 	 */
-	public DVD( String title, int year, long style, int amount, boolean sell, boolean rent, double price) {
+	public DVD( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		this.style = style;
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.price = price;
+		this.buyPrice = byprice;
+		this.rentPrice = rentPrice;
 		this.rentAmount = 0;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
@@ -115,17 +119,19 @@ public class DVD {
 	 * @param amount
 	 * @param sell
 	 * @param rent
-	 * @param price
+	 * @param buyprice
+	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double price, int rentAmount) {
+	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.year = year;
 		this.style = style;
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.price = price;
+		this.buyPrice = byprice;
+		this.rentPrice = rentPrice;
 		this.rentAmount = rentAmount;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
@@ -141,19 +147,45 @@ public class DVD {
 	 * @param amount
 	 * @param sell
 	 * @param rent
-	 * @param price
+	 * @param buyprice
+	 * @param rentPrice
 	 */
-	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double price) {
+	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		this.style = style;
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.price = price;
+		this.buyPrice = byprice;
+		this.rentPrice = rentPrice;
 		this.rentAmount = 0;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
+	}
+	/**
+	 * @return buyPrice
+	 */
+	public double getBuyPrice() {
+		return buyPrice;
+	}
+	/**
+	 * @param buyPrice 要设置的 buyPrice
+	 */
+	public void setBuyPrice(double buyPrice) {
+		this.buyPrice = buyPrice;
+	}
+	/**
+	 * @return rentPrice
+	 */
+	public double getRentPrice() {
+		return rentPrice;
+	}
+	/**
+	 * @param rentPrice 要设置的 rentPrice
+	 */
+	public void setRentPrice(double rentPrice) {
+		this.rentPrice = rentPrice;
 	}
 	/**
 	 * @return sELL_LIMIT
@@ -242,18 +274,6 @@ public class DVD {
 		return amount;
 	}
 	/**
-	 * @return price
-	 */
-	public double getPrice() {
-		return price;
-	}
-	/**
-	 * @param price 要设置的 price
-	 */
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	/**
 	 * @return sell
 	 * 可卖时余量大于sellLimit
 	 */
@@ -284,9 +304,9 @@ public class DVD {
 	 * @return boolean 借成功返回true 失败返回false
 	 */
 	public boolean rentOne() {
-		if (this.amount > rentLimit) {
+		if (this.amount > this.rentLimit) {
 			--this.amount;
-			if (this.amount <= rentLimit) {
+			if (this.amount <= this.rentLimit) {
 				this.rent = false;
 				this.sell = false;
 			}

@@ -22,7 +22,10 @@ public class ControlMain {
 	private String[] styleArray;	// = new String[64];
 	private static final int STYLE_ARRAY_LONG = 64;
 	
-	//TODO UserMainDateArrayList
+	/**
+	 * 用户列表
+	 */
+	private ArrayList<User> usersMainDateArrayList;
 	
 	/**
 	 * 唯一的构造方法<br>
@@ -32,6 +35,7 @@ public class ControlMain {
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
 		this.styleArray = new String[64];
 		this.styleArray[0] = new String("");
+		this.usersMainDateArrayList = new ArrayList<User>();
 	}
 	/**
 	 * 添加一个DVD，附带完整DVD参数
@@ -41,10 +45,11 @@ public class ControlMain {
 	 * @param amount
 	 * @param sell
 	 * @param rent
-	 * @param price
+	 * @param buyprice
+	 * @param rentPrice
 	 */
-	public void addDVD(String title, int year, long style, int amount, boolean sell, boolean rent, double price) {
-		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, price));
+	public void addDVD(String title, int year, long style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
+		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, buyPrice, rentPrice));
 	}
 	/**
 	 * 添加一个DVD，自动计算是否可租可卖
@@ -52,9 +57,10 @@ public class ControlMain {
 	 * @param year
 	 * @param style	注意商和
 	 * @param amount
-	 * @param price
+	 * @param buyprice
+	 * @param rentPrice
 	 */
-	public void addDVD(String title, int year, long style, int amount, double price) {
+	public void addDVD(String title, int year, long style, int amount, double buyPrice, double rentPrice) {
 		boolean sell;
 		if (amount > DVD.getSELL_LIMIT()) {
 			sell = true;
@@ -67,7 +73,7 @@ public class ControlMain {
 		} else {
 			rent = false;
 		}
-		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, price));
+		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, buyPrice, rentPrice));
 	}
 	/**
 	 * @param n	不可大于总长度
@@ -102,5 +108,36 @@ public class ControlMain {
 		return styleArray;
 	}
 	
+	/**
+	 * 添加一个用户<br>
+	 * 并初始化现金额度
+	 */
+	public void addOneUser( double money) {
+		usersMainDateArrayList.add(new User(money));
+	}
+	
+	/**
+	 * 获取指定用户对象
+	 * @param n	下标
+	 * @return	超出范围返回null
+	 */
+	public User getUser(int n) {
+		if (n > this.usersMainDateArrayList.size()) {
+			return null;
+		}
+		return this.usersMainDateArrayList.get(n);
+	}
+	
+	/**
+	 * 获取指定DVD对象
+	 * @param n	下标
+	 * @return	超出范围返回null
+	 */
+	public DVD getDVD(int n) {
+		if (n > this.dVDMainDateArrayList.size()) {
+			return null;
+		}
+		return this.dVDMainDateArrayList.get(n);
+	}
 
 }
