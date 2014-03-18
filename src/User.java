@@ -4,7 +4,7 @@
 
 /**
  * 用户类<br>
- * 做成可扩展的比较好<br>
+ * TODO 做成可扩展的比较好<br>
  * @author Jeremie
  *
  */

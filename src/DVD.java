@@ -21,6 +21,9 @@ public class DVD {
 	 * <br>
 	 * PS:其实是懒得用类型链了，难遍历，不便于分类管理<br>
 	 * 这样做时对应的分类表可以做成编号串<br>
+	 * <br>
+	 * <br>
+	 * TO DO 可以扩展为使用使用包装的动态bool数组配合同长度的动态String数组实现无限记录<br>
 	 */
 	private long style;
 	
@@ -50,12 +53,12 @@ public class DVD {
 	/**
 	 * 卖出限制
 	 */
-	private final int SELL_LIMIT = 3;
+	private static final int SELL_LIMIT = 3;
 	private  int sellLimit;
 	/**
 	 * 借出限制
 	 */
-	private final int RENT_LIMIT = 0;
+	private static final int RENT_LIMIT = 0;
 	private  int rentLimit;
 	/**
 	 * 为数组而设置的默认初始化函数<br>
@@ -155,13 +158,13 @@ public class DVD {
 	/**
 	 * @return sELL_LIMIT
 	 */
-	public int getSELL_LIMIT() {
+	public static int getSELL_LIMIT() {
 		return SELL_LIMIT;
 	}
 	/**
 	 * @return rENT_LIMIT
 	 */
-	public int getRENT_LIMIT() {
+	public static int getRENT_LIMIT() {
 		return RENT_LIMIT;
 	}
 
