@@ -18,10 +18,9 @@ public class ControlMain {
 	private ArrayList<DVD> dVDMainDateArrayList;
 	
 	/**
-	 * Style数据列		DVD.Style为long，长64^2，可记录64-1个
+	 * Style数组结构
 	 */
-	private String[] styleArray;	// = new String[64];
-	private static final int STYLE_ARRAY_LONG = 64;
+	private ArrayList<Style> dVDStyleArrayList;
 	
 	/**
 	 * 用户列表
@@ -34,10 +33,11 @@ public class ControlMain {
 	 */
 	public ControlMain() {
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
-		this.styleArray = new String[64];
-		this.styleArray[0] = new String("");
+		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
 	}
+	
+	// TO DO 在DVD类使用设置租买限制时，要添加一个可设置限制的DVDadd
 	
 	/**
 	 * 添加一个DVD，附带完整DVD参数
@@ -80,38 +80,47 @@ public class ControlMain {
 	}
 	
 	/**
-	 * @param n	不可大于总长度
-	 * @return styleArray	返回NULL对象表示没有设置这个位置
+	 * 添加一个Style
+	 * @param name
+	 * @return 重名返回false
 	 */
-	public String getStyleName( int n) {
-		if (n<STYLE_ARRAY_LONG) {
-			return styleArray[n];
-		} else {
-			return styleArray[0];
+	public boolean addStyle(String name){
+		for (Style a : this.dVDStyleArrayList) {
+			if (a.getName().equals(name)) {
+				return false;
+			}
 		}
+		this.dVDStyleArrayList.add( new Style(name) );
+		return true;
+	}
+
+	/**
+	 * 从Index获取Style名<br>
+	 * 遍历用<br>
+	 * <br>
+	 * Java没有size_type吗.<br>
+	 * @param Index
+	 * @return	找不到，返回null
+	 */
+	public String getStyle(int Index){
+		if (Index < this.dVDStyleArrayList.size()) {
+			return this.dVDStyleArrayList.get(Index).getName();
+		}
+		return null;
 	}
 	
 	/**
-	 * @param n 设置的style的位置
-	 * @param style 要设置的 style
-	 * @return 超出范围返回false	设置成功返回true
+	 * 从ID获取Style名<br>
+	 * @param ID
+	 * @return	找不到，返回null
 	 */
-	public boolean setStyleName( int n, String style) {
-		if (n<STYLE_ARRAY_LONG) {
-			this.styleArray[n] = style;
-			return true;
-		} else {
-			return false;
+	public String getStyle( long ID){
+		for (Style a : this.dVDStyleArrayList) {
+			if (a.getID() == ID) {
+				return a.getName();
+			}
 		}
-	}
-	
-	/**
-	 * 获取整个styleArray<br>
-	 * 不可改变内容<br>
-	 * @return styleArray
-	 */
-	public final String[] getStyleArray() {
-		return styleArray;
+		return null;
 	}
 	
 	/**
@@ -127,29 +136,65 @@ public class ControlMain {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 获取指定用户对象
-	 * @param n	下标
+	 * 获取指定用户对象<br>
+	 * 遍历用<br>
+	 * @param Index	下标
 	 * @return	超出范围返回null
 	 */
-	public User getUser(int n) {
-		if (n > this.usersMainDateArrayList.size()) {
+	public User getUser(int Index) {
+		if (Index > this.usersMainDateArrayList.size()) {
 			return null;
 		}
-		return this.usersMainDateArrayList.get(n);
+		return this.usersMainDateArrayList.get(Index);
 	}
 	
 	/**
-	 * 获取指定DVD对象
-	 * @param n	下标
+	 * 获取指定用户对象<br>
+	 * 查找<br>
+	 * @param name		用户名
+	 * @return	找不到返回null
+	 */
+	public User getUser(String name) {
+		for (User a : this.usersMainDateArrayList) {
+			// 注意：有为null字符串的用户
+			// 其实，只要不为null，仅仅为""都不需要检测null
+			if (a.getName() != null) {
+				if (a.getName().equals(name)) {
+					return a;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 获取指定DVD对象<br>
+	 * 遍历用<br>
+	 * @param Index	下标
 	 * @return	超出范围返回null
 	 */
-	public DVD getDVD(int n) {
-		if (n > this.dVDMainDateArrayList.size()) {
+	public DVD getDVD(int Index) {
+		if (Index > this.dVDMainDateArrayList.size()) {
 			return null;
 		}
-		return this.dVDMainDateArrayList.get(n);
+		return this.dVDMainDateArrayList.get(Index);
+	}
+	
+	/**
+	 * 获取指定DVD对象<br>
+	 * 查找用<br>
+	 * @param Title		名字
+	 * @return	超出范围返回null
+	 */
+	public DVD getDVD(String Title) {
+		for (DVD a : this.dVDMainDateArrayList) {
+			if (a.getTitle().equals(Title)) {
+				return a;
+			}
+		}
+		return null;
 	}
 	
 

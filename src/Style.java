@@ -1,5 +1,7 @@
+import java.util.Random;
+
 /**
- * 
+ * 为提高扩展性而为DVD标注Style
  */
 
 /**
@@ -9,5 +11,33 @@
  *
  */
 public class Style {
+	private String Name;
+	private long ID;
+	/**
+	 * 唯一的构造函数
+	 * @param name
+	 * @param iD
+	 */
+	public Style(String name) {
+		this.Name = name;
+		Random r = new Random();
+		this.ID = r.nextLong();
+	}
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return Name;
+	}
+	/**
+	 * @return iD
+	 */
+	public long getID() {
+		return ID;
+	}
+	
 
 }
+
+
+

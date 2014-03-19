@@ -6,11 +6,19 @@ import java.util.ArrayList;
 
 /**
  * 用户类<br>
- * 做成可扩展的比较好<br>
+ * 注意：名字与密码有时为null<br>
  * @author Jeremie
  *
  */
 public class User {
+	/**
+	 * 用户名
+	 */
+	private String name;
+	/**
+	 * 密码
+	 */
+	private String password;
 	/**
 	 * 已经买到的和已经借到的DVD列
 	 */
@@ -24,19 +32,42 @@ public class User {
 	 */
 	private ArrayList<DVD> dateHandle;
 	/**
-	 * 唯一的构造函数<br>
+	 * 构造函数<br>
+	 * <br>
+	 * <br>
+	 * 自动将名字密码置null<br>
 	 * @param money	初始金额
-	 * @param Handle	指向主数据链的句柄
+	 * @param handle	指向主数据链的句柄
 	 */
-	public User(double money, ArrayList<DVD> Handle) {
+	public User(double money, ArrayList<DVD> handle) {
+		this.name = null;
+		this.password = null;
 		this.userDVDArrayList = new ArrayList<DVDUser>();
 		this.money = money;
-		this.dateHandle = Handle;
-		if (Handle==null) {
-			throw new ExceptionInInitializerError(new Throwable("Handle Cant are null !!"));
+		this.dateHandle = handle;
+		if (handle==null) {
+			throw new ExceptionInInitializerError("\n\tHandle Cant are null !!");
 		}
 	}
 	
+	/**
+	 * 带名字与密码的构造函数<br>
+	 * @param name
+	 * @param password
+	 * @param money
+	 * @param handle
+	 */
+	public User(String name, String password, double money, 	ArrayList<DVD> handle) {
+		this.name = name;
+		this.password = password;
+		this.userDVDArrayList = new ArrayList<DVDUser>();
+		this.money = money;
+		this.dateHandle = handle;
+		if (handle==null) {
+			throw new ExceptionInInitializerError("\n\tHandle Cant are null !!");
+		}
+	}
+
 	/**
 	 * 增加现金数量<br>
 	 * 可以是负数<br>
@@ -160,6 +191,36 @@ public class User {
 		this.userDVDArrayList.add(new DVDUser(name,ID,0,1));
 		return true;
 	}
+
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name 要设置的 name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password 要设置的 password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
 	
 }
 
