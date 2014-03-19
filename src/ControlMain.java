@@ -110,10 +110,16 @@ public class ControlMain {
 	
 	/**
 	 * 添加一个用户<br>
-	 * 并初始化现金额度
+	 * 并初始化现金额度<br>
+	 * @return dVDMainDateArrayList句柄为null时返回false
 	 */
-	public void addOneUser( double money) {
-		usersMainDateArrayList.add(new User(money));
+	public boolean addOneUser( double money) {
+		if (this.dVDMainDateArrayList != null) {
+			usersMainDateArrayList.add(new User(money, this.dVDMainDateArrayList));
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
