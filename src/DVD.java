@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * DVD对象的类<br>
  * @author Jeremie
@@ -61,6 +63,13 @@ public class DVD {
 	 */
 	private static final int RENT_LIMIT = 0;
 	private  int rentLimit;
+	
+	/**
+	 * 随机数生成的ID<br>
+	 * 由title和ID共同辨别DVD<br>
+	 */
+	private long ID;
+	
 	/**
 	 * 为数组而设置的默认初始化函数<br>
 	 * <br>
@@ -89,6 +98,8 @@ public class DVD {
 		this.rentPrice = 0;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
+		Random r = new Random();
+		this.ID = r.nextLong();
 	}
 	/**
 	 * 构造方法<br>
@@ -108,6 +119,8 @@ public class DVD {
 		this.rentAmount = 0;
 		this.sellLimit = SELL_LIMIT;
 		this.rentLimit = RENT_LIMIT;
+		Random r = new Random();
+		this.ID = r.nextLong();
 	}
 	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
@@ -225,11 +238,19 @@ public class DVD {
 //	public void setRentLimit(int rentLimit) {
 //		this.rentLimit = rentLimit;
 //	}
+	
+	
 	/**
 	 * @return rentAmount
 	 */
 	public int getRentAmount() {
 		return rentAmount;
+	}
+	/**
+	 * @return iD
+	 */
+	public long getID() {
+		return ID;
 	}
 	/**
 	 * @return title

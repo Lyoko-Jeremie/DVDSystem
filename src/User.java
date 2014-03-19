@@ -61,7 +61,7 @@ public class User {
 				// 钱够
 				if (dateHandle.get(n).rentOne()) {
 					// 能借
-					this.addRentDate(dateHandle.get(n).getTitle(), n);
+					this.addRentDate(dateHandle.get(n).getTitle(), dateHandle.get(n).getID());
 					return true;
 				}
 			}
@@ -72,29 +72,34 @@ public class User {
 	/**
 	 * 还DVD
 	 * @param name DVD名
-	 * @return	并没有借这个&没有这个 返回false
+	 * @return	并没有借这个or没有这个DVD 返回false
 	 */
 	public boolean reDVD(String name) {
-		int i = 0;
-		for (; i < this.userDVDArrayList.size(); i++) {
-			if (this.userDVDArrayList.get(i).getName().equals(name)) {	// 找到
-				{	// 判断开始
-					if (this.dateHandle.size() > this.userDVDArrayList.get(i).getIndex()) {
-						// 没有越界
-						if ( this.dateHandle.get(this.userDVDArrayList.get(i).getIndex()).getTitle().equals(name) ) {
-							// 名字一样
+		for (int i = 0; i < this.userDVDArrayList.size(); i++) {
+			if (this.userDVDArrayList.get(i).getName().equals(name)) {
+				// 搜索记录
+				for (DVD a : this.dateHandle) {
+					// 搜索DVD
+					if ( a.getTitle().equals(name) ) {
+						// 名字一样
+						if (a.getID() == this.userDVDArrayList.get(i).getID()) {
+							// ID一样
 							if ( this.userDVDArrayList.get(i).rentAmount > 0 ) {
 								// 确实有租
-								if ( this.dateHandle.get(this.userDVDArrayList.get(i).getIndex()).surrenderOne() ) {
+								if ( a.surrenderOne() ) {
 									// 确实能退
 									--this.userDVDArrayList.get(i).rentAmount;	// 终于退了 TAT
+									// 都为0要删除记录
+									if (this.userDVDArrayList.get(i).rentAmount == 0 && this.userDVDArrayList.get(i).buyAmount == 0) {
+										this.userDVDArrayList.remove(i);
+									}
 									return true;
 								}
 							}
 						}
 					}
-				}	// 判断结束
-				break;
+				}
+				break;		// 有记录但是没有对应DVD
 			}
 		}
 		return false;
@@ -113,7 +118,7 @@ public class User {
 				// 钱够
 				if (dateHandle.get(n).sellOne()) {
 					// 能买
-					this.addBuyDate(dateHandle.get(n).getTitle(), n);
+					this.addBuyDate(dateHandle.get(n).getTitle(), dateHandle.get(n).getID());
 					return true;
 				}
 			}
@@ -125,7 +130,7 @@ public class User {
 	 * 增加借记录
 	 * @return	新增的返回true 已经有的返回false
 	 */
-	private boolean addRentDate(String name,int index) {
+	private boolean addRentDate(String name,long ID) {
 		for (DVDUser a : this.userDVDArrayList) {
 			if (name.equals(a.getName())) {
 				// 找到
@@ -134,17 +139,16 @@ public class User {
 			}
 		}
 		// 未找到
-		this.userDVDArrayList.add(new DVDUser(name,index,1,0));
+		this.userDVDArrayList.add(new DVDUser(name,ID,1,0));
 		return true;
 	}
 	
-	 //TODO 减少借记录（还记录）
 	
 	/**
 	 * 增加买记录
 	 * @return	新增的返回true 已经有的返回false
 	 */
-	private boolean addBuyDate(String name, int index) {
+	private boolean addBuyDate(String name, long ID) {
 		for (DVDUser a : this.userDVDArrayList) {
 			if (name.equals(a.getName())) {
 				// 找到
@@ -153,7 +157,7 @@ public class User {
 			}
 		}
 		// 未找到
-		this.userDVDArrayList.add(new DVDUser(name,index,0,1));
+		this.userDVDArrayList.add(new DVDUser(name,ID,0,1));
 		return true;
 	}
 	
@@ -174,7 +178,6 @@ public class User {
 
 /**
  * User记录用DVD类<br>
- * 传送记录用<br>
  * @author Jeremie
  *
  */
@@ -184,17 +187,14 @@ class DVDUser {
 	 * 以名字为鉴别<br>
 	 * <br>
 	 * <br>
-	 * TO DO：<br>
-	 * 以DVD的hash为鉴别<br>
-	 * 以DVD对象为鉴别<br>
-	 * 以DVD编号为鉴别<br>
+	 * 以DVD的ID&name为鉴别<br>
 	 * 
 	 */
 	private String name;
 	/**
-	 * 下标
+	 * DVD的ID
 	 */
-	private int index;
+	private long ID;
 	/**
 	 * 已经借的数量
 	 */
@@ -207,15 +207,15 @@ class DVDUser {
 	/**
 	 * 构造函数
 	 * @param name
-	 * @param index
+	 * @param ID	对应DVD的ID
 	 * @param rentAmount
 	 * @param buyAmount
 	 */
-	public DVDUser(String name, int index, int rentAmount, int buyAmount) {
+	public DVDUser(String name, long ID, int rentAmount, int buyAmount) {
 		this.name = name;
 		this.rentAmount = rentAmount;
 		this.buyAmount = buyAmount;
-		this.index = index;
+		this.ID = ID;
 	}
 
 	/**
@@ -226,11 +226,12 @@ class DVDUser {
 	}
 
 	/**
-	 * @return index
+	 * @return iD
 	 */
-	public int getIndex() {
-		return index;
+	public long getID() {
+		return ID;
 	}
+	
 	
 }
 
