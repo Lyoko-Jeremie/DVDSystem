@@ -28,13 +28,32 @@ public class ControlMain {
 	private ArrayList<User> usersMainDateArrayList;
 	
 	/**
+	 * 反多对象保护
+	 */
+	private static int PRO = 0;
+	
+	
+	/**
 	 * 唯一的构造方法<br>
 	 * 初始化主数组结构ArrayList
 	 */
 	public ControlMain() {
+		if ( ControlMain.PRO>0) {
+			// 反多对象保护
+			throw new ExceptionInInitializerError("\n\tOnly Can Create One ControlMain Object!!!");
+		}
+		++ControlMain.PRO;
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
 		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
+	}
+	
+	/**
+	 * 析构<br>
+	 * 减少计数
+	 */
+	protected void finalize() {
+		--ControlMain.PRO;
 	}
 	
 	// TO DO 在DVD类使用设置租买限制时，要添加一个可设置限制的DVDadd

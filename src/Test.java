@@ -13,6 +13,8 @@ public class Test {
 //		ControlMain Test = new ControlMain();
 		Menu a = new Menu();
 //		Menu b = new Menu();
+		a.mainMenu(in);
+		
 		in.close();
 
 	}

@@ -11,26 +11,32 @@ import java.util.ArrayList;
  *
  */
 public class User {
+	
 	/**
 	 * 用户名
 	 */
 	private String name;
+	
 	/**
 	 * 密码
 	 */
 	private String password;
+	
 	/**
 	 * 已经买到的和已经借到的DVD列
 	 */
 	private ArrayList<DVDUser> userDVDArrayList; //= new ArrayList<DVDUser>();
+	
 	/**
 	 * 现金
 	 */
 	private double money;
+	
 	/**
 	 * 指向主数据链的句柄
 	 */
 	private ArrayList<DVD> dateHandle;
+	
 	/**
 	 * 构造函数<br>
 	 * <br>
