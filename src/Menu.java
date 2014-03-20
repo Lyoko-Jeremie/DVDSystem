@@ -110,7 +110,7 @@ class UserMenu{
 	public UserMenu(ControlMain mainDate) {
 		if ( UserMenu.PRO>0) {
 			// 反多对象保护
-			throw new ExceptionInInitializerError("\n\tOnly Can Create One Menu Object!!!");
+			throw new ExceptionInInitializerError("\n\tOnly Can Create One UserMenu Object!!!");
 		}
 		++UserMenu.PRO;
 		this.mainDate = mainDate;
