@@ -22,12 +22,19 @@ public class Style {
 		this.Name = name;
 		Random r = new Random();
 		this.ID = r.nextLong();
+		// System.out.println(this.ID);
 	}
 	/**
 	 * @return name
 	 */
 	public String getName() {
 		return Name;
+	}
+	/**
+	 * @param name ÒªÉèÖÃµÄ name
+	 */
+	public void setName(String name) {
+		Name = name;
 	}
 	/**
 	 * @return iD

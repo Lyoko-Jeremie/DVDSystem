@@ -25,7 +25,7 @@ public class User {
 	/**
 	 * 已经买到的和已经借到的DVD列
 	 */
-	private ArrayList<DVDUser> userDVDArrayList; //= new ArrayList<DVDUser>();
+	private ArrayList<DVDUser> userDVDArrayList;
 	
 	/**
 	 * 现金
@@ -61,15 +61,15 @@ public class User {
 	 * @param name
 	 * @param password
 	 * @param money
-	 * @param handle
+	 * @param DVDhandle
 	 */
-	public User(String name, String password, double money, 	ArrayList<DVD> handle) {
+	public User(String name, String password, double money, 	ArrayList<DVD> DVDhandle) {
 		this.name = name;
 		this.password = password;
 		this.userDVDArrayList = new ArrayList<DVDUser>();
 		this.money = money;
-		this.dateHandle = handle;
-		if (handle==null) {
+		this.dateHandle = DVDhandle;
+		if ( DVDhandle == null) {
 			throw new ExceptionInInitializerError("\n\tHandle Cant are null !!");
 		}
 	}
@@ -88,12 +88,10 @@ public class User {
 	/**
 	 * 借一个DVD<br>
 	 * @param n	DVD下标
-	 * @param Date	对DVD列表的引用
-	 * @return	超出界限or者钱不够or没法借返回false
+	 * @return	 超出界限or钱不够or没法借返回false
 	 */
 	public boolean rentDVD(int n) {
-		if (n < dateHandle.size()) {
-			// 没有越界
+		try {
 			if (this.money >= dateHandle.get(n).getRentPrice()) {
 				// 钱够
 				if (dateHandle.get(n).rentOne()) {
@@ -102,12 +100,32 @@ public class User {
 					return true;
 				}
 			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * 借一个DVD<br>
+	 * @param DVD
+	 * @return	 钱不够or没法借返回false
+	 */
+	public boolean rentDVD(DVD temp) {
+		if (this.money >= temp.getRentPrice()) {
+			// 钱够
+			if ( temp.rentOne()) {
+				// 能借
+				this.addRentDate( temp.getTitle(), temp.getID());
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	/**
-	 * 还DVD
+	 * 还DVD<br>
+	 * 会对DVD名和ID进行校验<br>
 	 * @param name DVD名
 	 * @return	并没有借这个or没有这个DVD 返回false
 	 */
@@ -143,14 +161,49 @@ public class User {
 	}
 	
 	/**
+	 * 还DVD<br>
+	 * 会对DVD名和ID进行校验<br>
+	 * @param index DVD下标
+	 * @return	下标越界or两数据表数据不一致 返回false
+	 */
+	public boolean reDVD(int index) {
+		DVDUser b;
+		try {
+			b = this.userDVDArrayList.get(index);
+		} catch (Exception e) {
+			return false;
+		}
+		for (DVD a : this.dateHandle) {
+			// 搜索DVD
+			if ( a.getTitle().equals(b.getName()) ) {
+				// 名字一样
+				if (a.getID() == b.getID()) {
+					// ID一样
+					if ( b.rentAmount > 0 ) {
+						// 确实有租
+						if ( a.surrenderOne() ) {
+							// 确实能退
+							--b.rentAmount;	// 终于退了 TAT
+							// 都为0要删除记录
+							if (b.rentAmount == 0 && b.buyAmount == 0) {
+								this.userDVDArrayList.remove(index);
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * 买一个DVD<br>
 	 * @param n	DVD下标
-	 * @param Date	对DVD列表的引用
 	 * @return	超出界限or钱不够or没法借返回false
 	 */
 	public boolean buyDVD(int n) {
-		if (n < dateHandle.size()) {
-			// 未越界
+		try {
 			if (this.money >= dateHandle.get(n).getBuyPrice()) {
 				// 钱够
 				if (dateHandle.get(n).sellOne()) {
@@ -158,6 +211,25 @@ public class User {
 					this.addBuyDate(dateHandle.get(n).getTitle(), dateHandle.get(n).getID());
 					return true;
 				}
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * 买一个DVD<br>
+	 * @param DVD
+	 * @return		钱不够or没法借返回false
+	 */
+	public boolean buyDVD(DVD temp) {
+		if (this.money >= temp.getBuyPrice()) {
+			// 钱够
+			if (temp.sellOne()) {
+				// 能买
+				this.addBuyDate(temp.getTitle(), temp.getID());
+				return true;
 			}
 		}
 		return false;
@@ -226,7 +298,45 @@ public class User {
 		this.password = password;
 	}
 	
+	/**
+	 * 获取拥有DVD列表总数
+	 * @return int
+	 */
+	public int getDVDListSize() {
+		return this.userDVDArrayList.size();
+	}
+
+	/**
+	 * @param index	
+	 * @return	Name
+	 */
+	public String getDVDListIndexName(int index) {
+		return this.userDVDArrayList.get(index).getName();
+	}
 	
+	/**
+	 * @param index
+	 * @return	ID
+	 */
+	public long getDVDListIndexID(int index) {
+		return this.userDVDArrayList.get(index).getID();
+	}
+	
+	/**
+	 * @param index
+	 * @return	RentAmount
+	 */
+	public int getDVDListIndexRentAmount(int index) {
+		return this.userDVDArrayList.get(index).rentAmount;
+	}
+	
+	/**
+	 * @param index
+	 * @return	BuyAmount
+	 */
+	public int getDVDListIndexBuyAmount(int index) {
+		return this.userDVDArrayList.get(index).buyAmount;
+	}
 	
 }
 

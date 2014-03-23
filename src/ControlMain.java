@@ -62,27 +62,61 @@ public class ControlMain {
 	 * 添加一个DVD，附带完整DVD参数
 	 * @param title
 	 * @param year
-	 * @param style	注意商和
+	 * @param style	
 	 * @param amount
 	 * @param sell
 	 * @param rent
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public void addDVD(String title, int year, long style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
+	public void addDVD(String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
 		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, buyPrice, rentPrice));
 	}
 	
 	/**
-	 * 添加一个DVD，自动计算是否可租可卖
+	 * 添加一个DVD，自动计算是否可租可卖，自动计算风格
 	 * @param title
 	 * @param year
-	 * @param style	注意商和
+	 * @param style	以空格分离的风格字串 如为空字串或为null则自动为空
 	 * @param amount
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public void addDVD(String title, int year, long style, int amount, double buyPrice, double rentPrice) {
+	public void addDVD(String title, int year, String style, int amount, double buyPrice, double rentPrice) {
+		boolean sell;
+		if (amount > DVD.getSELL_LIMIT()) {
+			sell = true;
+		} else {
+			sell = false;
+		}
+		boolean rent;
+		if (amount > DVD.getRENT_LIMIT()) {
+			rent = true;
+		} else {
+			rent = false;
+		}
+		ArrayList<Long> tAL = new ArrayList<Long>();
+		if (style != null) {
+			String[] tString = style.split(" ");
+			for (String a : tString) {
+				if (!a.equals("")) {
+					tAL.add( this.addStyleRID(a) );
+				}
+			}
+		}
+		dVDMainDateArrayList.add( new DVD(title, year, tAL, amount, sell, rent, buyPrice, rentPrice));
+	}
+
+	/**
+	 * 添加一个DVD，自动计算是否可租可卖
+	 * @param title
+	 * @param year
+	 * @param style	
+	 * @param amount
+	 * @param buyprice
+	 * @param rentPrice
+	 */
+	public void addDVD(String title, int year, ArrayList<Long> style, int amount, double buyPrice, double rentPrice) {
 		boolean sell;
 		if (amount > DVD.getSELL_LIMIT()) {
 			sell = true;
@@ -111,11 +145,26 @@ public class ControlMain {
 		}
 		this.dVDStyleArrayList.add( new Style(name) );
 		return true;
+	}	
+	
+	/**
+	 * 添加一个Style
+	 * @param name
+	 * @return 返回ID
+	 */
+	public long addStyleRID(String name){
+		for (Style a : this.dVDStyleArrayList) {
+			if (a.getName().equals(name)) {
+				return a.getID();
+			}
+		}
+		this.dVDStyleArrayList.add( new Style(name) );
+		return this.getStyleID(name);
 	}
 
 	/**
 	 * 从Index获取Style名<br>
-	 * 遍历用<br>
+	 * 遍历用【Only】<br>
 	 * <br>
 	 * Java没有size_type吗.<br>
 	 * @param Index
@@ -126,6 +175,21 @@ public class ControlMain {
 			return this.dVDStyleArrayList.get(Index).getName();
 		}
 		return null;
+	}
+	
+	/**
+	 * 从Style名获取ID<br>
+	 * <br>
+	 * @param Index
+	 * @return	找不到，返回0
+	 */
+	public long getStyleID(String style){
+		for (Style a : this.dVDStyleArrayList) {
+			if (a.getName().equals(style)) {
+				return a.getID();
+			}
+		}
+		return 0;
 	}
 	
 	/**
@@ -143,13 +207,23 @@ public class ControlMain {
 	}
 	
 	/**
+	 * 获取Style总数量
+	 * @return int  Size
+	 */
+	public int getStyleSize() {
+		return this.dVDStyleArrayList.size();
+	}
+	
+	/**
 	 * 添加一个用户<br>
 	 * 并初始化现金额度<br>
+	 * @param money
+	 * @param name
 	 * @return dVDMainDateArrayList句柄为null时返回false
 	 */
-	public boolean addOneUser( double money) {
+	public boolean addOneUser(String name, String password, double money) {
 		if (this.dVDMainDateArrayList != null) {
-			usersMainDateArrayList.add(new User(money, this.dVDMainDateArrayList));
+			usersMainDateArrayList.add(new User(name, password, money, this.dVDMainDateArrayList));
 			return true;
 		} else {
 			return false;
@@ -163,10 +237,11 @@ public class ControlMain {
 	 * @return	超出范围返回null
 	 */
 	public User getUser(int Index) {
-		if (Index > this.usersMainDateArrayList.size()) {
+		try {
+			return this.usersMainDateArrayList.get(Index);
+		} catch (Exception e) {
 			return null;
 		}
-		return this.usersMainDateArrayList.get(Index);
 	}
 	
 	/**
@@ -195,17 +270,26 @@ public class ControlMain {
 	 * @return	超出范围返回null
 	 */
 	public DVD getDVD(int Index) {
-		if (Index > this.dVDMainDateArrayList.size()) {
+		try {
+			return this.dVDMainDateArrayList.get(Index);
+		} catch (Exception e) {
 			return null;
 		}
-		return this.dVDMainDateArrayList.get(Index);
+	}
+	
+	/**
+	 * 获取DVD总数量
+	 * @return	int
+	 */
+	public int getDVDSize() {
+		return this.dVDMainDateArrayList.size();
 	}
 	
 	/**
 	 * 获取指定DVD对象<br>
 	 * 查找用<br>
 	 * @param Title		名字
-	 * @return	超出范围返回null
+	 * @return		找不到返回null
 	 */
 	public DVD getDVD(String Title) {
 		for (DVD a : this.dVDMainDateArrayList) {
@@ -216,5 +300,34 @@ public class ControlMain {
 		return null;
 	}
 	
-
+	/**
+	 * 获取指定DVD对象<br>
+	 * 查找用<br>
+	 * @param ID		名字
+	 * @return		找不到返回null
+	 */
+	public DVD getDVD(long iD) {
+		for (DVD a : this.dVDMainDateArrayList) {
+			if (a.getID() == iD) {
+				return a;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取指定DVD对象的指定风格
+	 * @param A	指定的DVD对象
+	 * @param index	列下标
+	 * @return String	Style字串，没有找到or超范围返回空字串
+	 */
+	public String getDVDStyle( DVD A, int index) {
+		if (index >= 0 && index < A.styleGetSize()) {
+			String t = this.getStyle(A.styleGet(index));
+			return ( ( t != null )? t : "" );
+		}
+		return "";
+	}
+	
+	
 }

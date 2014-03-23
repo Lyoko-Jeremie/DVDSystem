@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -19,7 +20,7 @@ public class DVD {
 	 * 电影类型&风格<br>
 	 * 另使用关键字列表查询所对应信息<br>
 	 */
-	private long style;
+	private ArrayList<Long> style;
 	
 	/**
 	 * 总计余量
@@ -68,7 +69,7 @@ public class DVD {
 	 * 初始化内容：<br>
 	 * title = ""<br>
 	 * year = 0<br>
-	 * style = 0<br>
+	 * style = new ArrayList< Long >()<br>
 	 * amount = 0<br>
 	 * sell = false<br>
 	 * rent =  false<br>
@@ -81,7 +82,7 @@ public class DVD {
 	public DVD() {
 		this.title = "";
 		this.year = 0;
-		this.style = 0;
+		this.style = new ArrayList<Long>();
 		this.amount = 0;
 		this.sell = false;
 		this.rent =  false;
@@ -95,14 +96,26 @@ public class DVD {
 	}
 	/**
 	 * 构造方法<br>
+	 * style != null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
-	 * @author Jeremie
+	 * @param title
+	 * @param year
+	 * @param style
+	 * @param amount
+	 * @param sell
+	 * @param rent
+	 * @param buyprice
+	 * @param rentPrice
 	 */
-	public DVD( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
+	public DVD( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
-		this.style = style;
+		if (style != null) {
+			this.style = style;
+		} else {
+			throw new ExceptionInInitializerError("style cant are null");
+		}
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
@@ -116,6 +129,7 @@ public class DVD {
 	}
 	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
+	 * style != null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
@@ -128,10 +142,14 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
+	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.year = year;
-		this.style = style;
+		if (style != null) {
+			this.style = style;
+		} else {
+			throw new ExceptionInInitializerError("style cant are null");
+		}
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
@@ -144,6 +162,7 @@ public class DVD {
 	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
 	 * 无需设置rentAmount<br>
+	 * style != null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
@@ -155,10 +174,14 @@ public class DVD {
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public void setAllDate( String title, int year, long style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
+	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
-		this.style = style;
+		if (style != null) {
+			this.style = style;
+		} else {
+			throw new ExceptionInInitializerError("style cant are null");
+		}
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
@@ -269,16 +292,67 @@ public class DVD {
 		this.year = year;
 	}
 	/**
-	 * @return style
+	 * @return style	因为需要保护内部对象 返回的是临时对象 TMDjava虚拟机造成的内存泄漏和资源占用我就不管了
 	 */
-	public long getStyle() {
-		return style;
+	public ArrayList<Long> styleGetAll() {
+		return new ArrayList<Long>(style);
 	}
 	/**
-	 * @param style 要设置的 style
+	 * @return int
 	 */
-	public void setStyle(long style) {
+	public int styleGetSize() {
+		return style.size();
+	}
+	/**
+	 * @return long		不检查越界
+	 */
+	public long styleGet(int index) {
+		return style.get(index);
+	}
+	/**
+	 * 重设整个的 style
+	 * @param style
+	 */
+	public void styleSetALL(ArrayList<Long> style) {
 		this.style = style;
+	}
+	/**
+	 * @param style 要增加的 style
+	 * @return 已经有了false
+	 */
+	public boolean styleAdd(long style) {
+		for (Long a : this.style) {
+			if (a.equals(style)) {
+				return false;
+			}
+		}
+		this.style.add(style);
+		return true;
+	}
+	/**
+	 * @param style 要查找的 style
+	 * @return 找到true
+	 */
+	public boolean styleTest(long style) {
+		for (Long a : this.style) {
+			if (a.equals(style)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * @param style 要删除的 style
+	 * @return 找到true
+	 */
+	public boolean styleDelete(long style) {
+		for (int i = 0; i != this.style.size(); ++i) {
+			if (this.style.get(i).equals(style)) {
+				this.style.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 	/**
 	 * @return amount
