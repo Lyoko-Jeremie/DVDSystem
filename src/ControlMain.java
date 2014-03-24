@@ -28,6 +28,11 @@ public class ControlMain {
 	private ArrayList<User> usersMainDateArrayList;
 	
 	/**
+	 * 文件操作类
+	 */
+	private ControlFile mainFile;
+	
+	/**
 	 * 反多对象保护
 	 */
 	private static int PRO = 0;
@@ -46,6 +51,7 @@ public class ControlMain {
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
 		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
+		this.mainFile = new ControlFile("DVDSystemDate.DSD", this);
 	}
 	
 	/**
