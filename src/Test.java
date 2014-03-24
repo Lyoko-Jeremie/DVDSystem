@@ -20,7 +20,7 @@ public class Test {
 	}
 	
 	public static void init( ControlMain TR ) {
-		TR.addOneUser("", "", 1000000);
+		TR.addOneUser("", "", Integer.MAX_VALUE);
 		// TR.addStyle("°®Çé");
 		// TR.addStyle("Ï²¾ç");
 		// TR.addStyle("Ð£Ô°");
@@ -72,7 +72,7 @@ public class Test {
 		TR.addDVD("ºó´°", 1955, "·¸×ï ÉñÃØ °®Çé ¾ªâð", 1000, 100, 100);
 		TR.addDVD("òùòðÏÀ£ººÚ°µÆïÊ¿áÈÆð", 2012, "", 1000, 100, 100);
 		TR.addDVD("¾ª»ê¼Ç", 1960, "¾çÇé ¿Ö²À ÉñÃØ ¾ªâð", 1000, 100, 100);
-		// TR.addDVD("", , "", 1000, 100, 100);
+//		 TR.addDVD("", , "", 1000, 100, 100);
 		// TR.addDVD("", , "", 1000, 100, 100);
 		
 	}

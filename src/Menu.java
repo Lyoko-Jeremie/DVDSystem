@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+
 
 /**
  * 菜单<br>
@@ -183,30 +185,33 @@ class UserMenu{
 
 			case 6:
 				{	// 6)\t按名搜索DVD
-					
+					this.searchInKey(in);
 				}
 				break;
 
 			case 7:
 				{	// 7)\t分类显示DVD
-					
+					this.viewDVDInStyle(in);
 				}
 				break;
 				
-			case 8:
-			{	// Test
-			}
-			break;
+//			case 10:
+//			{	// Test
+//				for (int i = 0; i < this.mainDate.getStyleSize(); i++) {
+//					Toolz.println(this.mainDate.getStyle(i));
+//				}
+//			}
+//			break;
 
-			case 9:
+			case 0:
 				{
 					// TO DO 文件保存
 					Toolz.println("您已经退出用户菜单.");
 					return;
 				}
 //				break;
-
-			case 0:	// 同default
+				
+			case -1:	// 同default
 			default:
 				Toolz.println("请输入正确的选项.");
 				break;
@@ -236,9 +241,9 @@ class UserMenu{
 		Toolz.println("3)\t买一个DVD");
 		Toolz.println("4)\t租一个DVD");
 		Toolz.println("5)\t退一个已经租的DVD");
-		Toolz.println("6)\t按名搜索DVD");
+		Toolz.println("6)\t关键字搜索DVD");
 		Toolz.println("7)\t分类显示DVD");
-		Toolz.println("9)\t退出用户菜单");
+		Toolz.println("0)\t退出用户菜单");
 		Toolz.println("==========================");
 		Toolz.println("请输入您所选择的功能的数字：");
 	}
@@ -371,7 +376,7 @@ class UserMenu{
 		Toolz.println( "找到的DVD信息：" );
 		Toolz.println( getDVDFormartBaseInform(Temp) + getDVDFormartRBInform(Temp) );
 		
-		Toolz.println( "价格：\t租：" + Temp.getRentPrice() + "\t买：" + Temp.getBuyPrice() );
+		Toolz.println( "价格：\n租价：" + Temp.getRentPrice() + "\t买价：" + Temp.getBuyPrice() );
 		if (!Temp.canSell()) {
 			Toolz.println( "很可惜，这个DVD已经无法再出售。" );
 			return;
@@ -426,8 +431,8 @@ class UserMenu{
 		
 		Toolz.println( "找到的DVD信息：" );
 		Toolz.println( getDVDFormartBaseInform(Temp) + getDVDFormartRBInform(Temp) );
-		
-		Toolz.println( "价格：\t租：" + Temp.getRentPrice() + "\t买：" + Temp.getBuyPrice() );
+
+		Toolz.println( "价格：\n租价：" + Temp.getRentPrice() + "\t买价：" + Temp.getBuyPrice() );
 		if (!Temp.canRent()) {
 			Toolz.println( "很可惜，这个DVD已经无法再租借。" );
 			return;
@@ -482,6 +487,62 @@ class UserMenu{
 		}
 		
 	}
+	
+	private void viewDVDInStyle(Scanner in) {
+		Toolz.println("现有的类型如下：");
+		for (int i = 0; i < this.mainDate.getStyleSize(); i++) {
+			Toolz.print(this.mainDate.getStyle(i) + " ");
+		}
+		Toolz.println();
+		Toolz.println("请输入要限定的类型，多个类型之间请以空格格开：");
+		String inString = in.nextLine();
+		String[] inStringArray = inString.split(" ");
+		ArrayList<Long> inIDArrayList = new ArrayList<Long>();
+		for (String a : inStringArray) {
+			if ( this.mainDate.getStyleID(a) != 0) {
+				inIDArrayList.add( this.mainDate.getStyleID(a) );
+			}
+		}
+//		Toolz.println("从输入中解析到的已有类型如下：");
+		Toolz.println("将以下类型的搜索结果：");
+		for (Long a : inIDArrayList) {
+			Toolz.print( this.mainDate.getStyle(a) + " " );
+		}
+		Toolz.println();
+		// 搜索
+		for (int i = 0; i < this.mainDate.getDVDSize(); i++) {
+			for (Long a : inIDArrayList) {
+				if (  this.mainDate.getDVD(i).styleTest(a) ) {
+					Toolz.println( i + ") " + this.getDVDFormartBaseInform(this.mainDate.getDVD(i)) + this.getDVDFormartRBInform(this.mainDate.getDVD(i)) );
+					break;	// 防止重复显示
+				}
+			}
+		}
+		Toolz.println();
+	}
+	
+	/**
+	 * 以部分关键字搜索DVD
+	 * @param in
+	 */
+	private void searchInKey(Scanner in) {
+		Toolz.println("请输入一个简短的关键字：");
+		String keyString = in.nextLine();
+		int keySize = keyString.length();
+		Toolz.println("下面是搜索结果：");
+		for (int i = 0; i < this.mainDate.getDVDSize(); i++) {
+			String targetString = this.mainDate.getDVD(i).getTitle();
+			if (targetString.length() >= keySize) {
+				for (int j = 0; j <= targetString.length() - keySize; j++) {
+					if ( targetString.substring(j, j + keySize).equals(keyString) ) {
+						Toolz.println( i + ") " + this.getDVDFormartBaseInform(this.mainDate.getDVD(i)) + this.getDVDFormartRBInform(this.mainDate.getDVD(i)) );
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 }
 
 
@@ -507,16 +568,18 @@ class Toolz {
 	
 	/**
 	 * 解析输入字符串到int<br>
+	 * 现在同getCompInt<br>
 	 * @param in
-	 * @return	 没有解析出整数返回0	返回1~9
+	 * @return	 没有解析出整数返回0	【delete 返回1~9】
 	 */
 	public static int getInt(String in) {
-		for (char a : in.toCharArray() ) {
-			if (Character.isDigit(a)) {
-				return (int) ( a - '0' );
-			}
-		}
-		return 0;
+		return getCompInt(in);
+//		for (char a : in.toCharArray() ) {
+//			if (Character.isDigit(a)) {
+//				return (int) ( a - '0' );
+//			}
+//		}
+//		return 0;
 	}
 	
 	/**
@@ -527,15 +590,17 @@ class Toolz {
 	public static int getCompInt(String in) {
 		int i = 0;
 		boolean flag = false;
-		char tc = in.toCharArray()[0];
-		if ( '0' <= tc && tc <= '9' ) {
-			return -1;
-		}
+//		char tc = in.toCharArray()[0];
+//		if ( '0' <= tc && tc <= '9' ) {
+//			return -1;
+//		}
 		for (char a : in.toCharArray()) {
 			if ( '0' <= a && a <= '9' ) {
 				flag = true;
 				i*=10;
 				i+= (int) a - '0';
+			}else {
+				return -1;
 			}
 		}
 		if (!flag) {
