@@ -51,7 +51,7 @@ public class ControlMain {
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
 		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
-		this.mainFile = new ControlFile("DVDSystemDate.DSD", this);
+		this.mainFile = new ControlFile("DVDSystemDate.DVDSystemDAteBaseFile", this);
 //		this.mainFile = new ControlFile("C:\\", this);
 	}
 	
@@ -334,6 +334,38 @@ public class ControlMain {
 			return ( ( t != null )? t : "" );
 		}
 		return "";
+	}
+
+	/**
+	 * @return dVDMainDateArrayList
+	 * Waring:µÍÐ§
+	 */
+	public ArrayList<DVD> getDVDMainDateArrayList() {
+		return new  ArrayList<DVD>(dVDMainDateArrayList);
+	}
+
+	/**
+	 * @return dVDStyleArrayList
+	 * Waring:µÍÐ§
+	 */
+	public ArrayList<Style> getDVDStyleArrayList() {
+		return new ArrayList<Style>(dVDStyleArrayList);
+	}
+
+	/**
+	 * @return usersMainDateArrayList
+	 * Waring:µÍÐ§
+	 */
+	public ArrayList<User> getUsersMainDateArrayList() {
+		return new ArrayList<User>(usersMainDateArrayList);
+	}
+
+	/**
+	 * TODO Test
+	 * @return mainFile
+	 */
+	public ControlFile getMainFile() {
+		return mainFile;
 	}
 	
 	

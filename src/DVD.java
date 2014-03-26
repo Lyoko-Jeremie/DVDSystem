@@ -345,9 +345,13 @@ public class DVD {
 	}
 	/**
 	 * 重设整个的 style
-	 * @param style
+	 * @param style	不能为null
+	 * @throws Exception 
 	 */
-	public void styleSetALL(ArrayList<Long> style) {
+	public void styleSetALL(ArrayList<Long> style) throws Exception {
+		if (style == null) {
+			throw new Exception("Cant Are null.");
+		}
 		this.style = style;
 	}
 	/**

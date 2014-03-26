@@ -23,14 +23,14 @@ public class User {
 	private String password;
 	
 	/**
-	 * 已经买到的和已经借到的DVD列
-	 */
-	private ArrayList<DVDUser> userDVDArrayList;
-	
-	/**
 	 * 现金
 	 */
 	private double money;
+	
+	/**
+	 * 已经买到的和已经借到的DVD列
+	 */
+	private ArrayList<DVDUser> userDVDArrayList;
 	
 	/**
 	 * 指向主数据链的句柄
@@ -298,6 +298,20 @@ public class User {
 		this.password = password;
 	}
 	
+	/**
+	 * @return money
+	 */
+	public double getMoney() {
+		return money;
+	}
+
+	/**
+	 * @param money 要设置的 money
+	 */
+	public void setMoney(double money) {
+		this.money = money;
+	}
+
 	/**
 	 * 获取拥有DVD列表总数
 	 * @return int

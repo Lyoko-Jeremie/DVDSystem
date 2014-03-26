@@ -86,6 +86,11 @@ public class Test {
 		TR.addDVD("城市之光", 1931, "喜剧 剧情 爱情", 1000, 100, 100);
 		TR.addDVD("千与千寻", 2001, "动画 冒险 家庭 奇幻", 1000, 100, 100);
 		// TR.addDVD("", , "", 1000, 100, 100);
+		System.out.println(TR.getMainFile().createNewFile());
+		System.out.println(TR.getMainFile().openWriteHandle());
+		System.out.println(TR.getMainFile().isOpenWriteHandle());
+		System.out.println(TR.getMainFile().writeMainDate());
+		TR.getMainFile().closeWriteHandle();
 		
 	}
 
