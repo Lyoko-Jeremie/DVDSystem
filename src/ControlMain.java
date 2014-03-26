@@ -52,6 +52,7 @@ public class ControlMain {
 		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
 		this.mainFile = new ControlFile("DVDSystemDate.DSD", this);
+//		this.mainFile = new ControlFile("C:\\", this);
 	}
 	
 	/**

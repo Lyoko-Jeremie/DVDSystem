@@ -27,13 +27,13 @@ public class ControlFile {
 	 * @param filePathName
 	 * @param mainDate
 	 */
-	public ControlFile( String filePathName, ControlMain mainDate) {
+	public ControlFile( String filePathName, ControlMain mainDate) throws ExceptionInInitializerError {
 		this.mainDate = mainDate;
 		this.mainFile = new File(filePathName);
 		if ( mainFile.exists() && !( mainFile.canRead() && mainFile.canWrite() ) ) {
 			throw new ExceptionInInitializerError("File Cant Read or Write.");
 		}
-		if ( !mainFile.isFile() ) {
+		if ( mainFile.exists() && !mainFile.isFile() ) {
 			throw new ExceptionInInitializerError("Not a file");
 		}
 		mainReadHandle = null;
