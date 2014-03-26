@@ -494,6 +494,7 @@ class UserMenu{
 			Toolz.print(this.mainDate.getStyle(i) + " ");
 		}
 		Toolz.println();
+		Toolz.println();
 		Toolz.println("请输入要限定的类型，多个类型之间请以空格格开：");
 		String inString = in.nextLine();
 		String[] inStringArray = inString.split(" ");
@@ -503,11 +504,13 @@ class UserMenu{
 				inIDArrayList.add( this.mainDate.getStyleID(a) );
 			}
 		}
+		Toolz.println();
 //		Toolz.println("从输入中解析到的已有类型如下：");
 		Toolz.println("将以下类型的搜索结果：");
 		for (Long a : inIDArrayList) {
 			Toolz.print( this.mainDate.getStyle(a) + " " );
 		}
+		Toolz.println();
 		Toolz.println();
 		// 搜索
 		for (int i = 0; i < this.mainDate.getDVDSize(); i++) {
