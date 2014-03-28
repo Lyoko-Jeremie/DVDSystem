@@ -160,7 +160,7 @@ public class DVD {
 		this.rentLimit = RENT_LIMIT;
 	}
 	/**
-	 * 设置所有数据，这个方法为文件读取而设计<br>
+	 * 构造所有数据，这个方法为文件读取而设计<br>
 	 * style != null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
@@ -175,7 +175,7 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public void setAllDate( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
+	public DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.ID = iD;
 		this.year = year;

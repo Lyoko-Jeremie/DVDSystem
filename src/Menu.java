@@ -583,6 +583,22 @@ class Toolz {
 	}
 	
 	/**
+	 * 使用多态实现的从输入获取信息并判断<br>
+	 * <br>
+	 * 缺陷：无法处理纯空字符输入 e.g. 空格、回车<br>
+	 * @param in
+	 * @return	是int返回内容 不是则返回-1
+	 */
+	public static int getTheInt(Scanner in) {
+		Object iObject = in.next();
+		in.nextLine();	// 清空输入
+		if ( iObject instanceof Integer ) {
+			return (Integer)iObject;
+		}
+		return -1;
+	}
+	
+	/**
 	 * 获取开头的int
 	 * @param in
 	 * @return 没有解析出整数返回-1	返回int

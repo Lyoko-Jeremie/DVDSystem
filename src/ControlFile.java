@@ -224,25 +224,116 @@ public class ControlFile {
 		}
 		mainWriteHandle.println();
 		mainWriteHandle.println("DVDObjectB");
-		mainWriteHandle.println(dbject.getTitle());
-		mainWriteHandle.println(dbject.getID());
-		mainWriteHandle.println(dbject.getYear());
-		mainWriteHandle.println(dbject.getAmount());
-		mainWriteHandle.println(dbject.getBuyPrice());
-		mainWriteHandle.println(dbject.getRentPrice());
-		mainWriteHandle.println(dbject.getRentAmount());
-		mainWriteHandle.println(dbject.canSell());
-		mainWriteHandle.println(dbject.canRent());
+		mainWriteHandle.println(dbject.getTitle());	// String
+		mainWriteHandle.println(dbject.getID());	// Long
+		mainWriteHandle.println(dbject.getYear());	// int
+		mainWriteHandle.println(dbject.getAmount());	// int
+		mainWriteHandle.println(dbject.getBuyPrice());	// double
+		mainWriteHandle.println(dbject.getRentPrice());	// double
+		mainWriteHandle.println(dbject.getRentAmount());	// int
+		mainWriteHandle.println(dbject.canSell());	// bool
+		mainWriteHandle.println(dbject.canRent());	// bool
 		// 未来扩展的插入位置
 		mainWriteHandle.println("DVDObjectSB");
-		mainWriteHandle.println(dbject.styleGetSize());
+		mainWriteHandle.println(dbject.styleGetSize());	// int
 		for (Long a : dbject.styleGetAll()) {
-			mainWriteHandle.println(a);
+			mainWriteHandle.println(a);	// Long
 		}
 		mainWriteHandle.println("DVDObjectSE");
 		mainWriteHandle.println("DVDObjectE");
 		return true;
 	}
+	
+	/**
+	 * 读取一个DVD对象<br>
+	 * 包括前导空行<br>
+	 * <br>
+	 * 成功返回构造好的对象<br>
+	 * 失败抛出异常<br>
+	 * @return
+	 * @throws Exception
+	 */
+	public DVD readDVD() throws Exception {
+		if ( mainReadHandle == null ) {
+			throw new Exception("Read Handle is null.");
+		}
+		Scanner in = mainReadHandle;
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("DVDObjectB")) {
+			throw new Exception("Read Error.");
+		}
+		// String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount
+		String title;
+		long iD;
+		int year;
+		ArrayList<Long> style = new ArrayList<Long>();
+		int amount;
+		boolean sell;
+		boolean rent;
+		double byprice;
+		double rentPrice;
+		int rentAmount;
+		if ( !in.hasNextLine() ) {
+			throw new Exception("Read Error.");
+		}
+		title = in.nextLine();
+		if ( !in.hasNextLong() ) {
+			throw new Exception("Read Error.");
+		}
+		iD = in.nextLong();
+		if ( !in.hasNextInt() ) {
+			throw new Exception("Read Error.");
+		}
+		year = in.nextInt();
+		if ( !in.hasNextInt() ) {
+			throw new Exception("Read Error.");
+		}
+		amount = in.nextInt();
+		if ( !in.hasNextDouble() ) {
+			throw new Exception("Read Error.");
+		}
+		byprice = in.nextDouble();
+		if ( !in.hasNextDouble() ) {
+			throw new Exception("Read Error.");
+		}
+		rentPrice = in.nextDouble();
+		if ( !in.hasNextInt() ) {
+			throw new Exception("Read Error.");
+		}
+		rentAmount = in.nextInt();
+		if ( !in.hasNextBoolean() ) {
+			throw new Exception("Read Error.");
+		}
+		sell = in.nextBoolean();
+		if ( !in.hasNextBoolean() ) {
+			throw new Exception("Read Error.");
+		}
+		rent = in.nextBoolean();
+		if ( !in.nextLine().equals("DVDObjectSB")) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.hasNextInt() ) {
+			throw new Exception("Read Error.");
+		}
+		int iTemp = in.nextInt();
+		for (int i = 0; i < iTemp; i++) {
+			if ( !in.hasNextLong() ) {
+				throw new Exception("Read Error.");
+			}
+			style.add(in.nextLong());
+		}
+		if ( !in.nextLine().equals("DVDObjectSE")) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("DVDObjectE")) {
+			throw new Exception("Read Error.");
+		}
+		return new DVD(title, iD, year, style, amount, sell, rent, byprice, rentPrice, rentAmount);
+	}
+	
+	
 	
 	/**
 	 * 写入一个Style对象
