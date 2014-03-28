@@ -155,7 +155,7 @@ class UserMenu{
 			switch (selectInt) {
 			case 1:
 				{	// 1)\t查看所有可租或可卖的DVD
-					this.listAllDVD();
+					this.listAllDVD(in);
 				}
 				break;
 
@@ -251,17 +251,26 @@ class UserMenu{
 	/**
 	 * 列出所有的
 	 */
-	private void listAllDVD()
+	private void listAllDVD(Scanner in)
 	{
 		/*
  		 *电影必须有名字、年份、电影类型、状态
 		 *例如： 小时代 ：2013年：爱情 喜剧 校园：可买|可租
 		 */
 		Toolz.println();
+		boolean t = ( mainDate.getDVDSize()<=10 ? false : true );
 		for (int i = 0; i < mainDate.getDVDSize(); i++) {
 			DVD Temp = mainDate.getDVD(i);
 			Toolz.print( i + ") " + getDVDFormartBaseInform(Temp) + getDVDFormartRBInform(Temp) );
 			Toolz.println();
+			if ( t && i != 0 && ((i+1)%5)==0 ) {
+				Toolz.println("直接回车继续显示，输入任意内容并回车则停止显示。");
+				String inString = in.nextLine();
+				if (!inString.equals("")) {
+					Toolz.println("停止显示。");
+					break;
+				}
+			}
 		}
 	}
 	
@@ -449,9 +458,19 @@ class UserMenu{
 	/**
 	 * 退
 	 */
-	private void reDVD(Scanner in)
+	private void reDVD(Scanner in)	// TODO  这个功能还要修改
 	{
-		Toolz.println("以DVD名退选1\t以DVD编号退选2\n请选择并回车【有的名字可能搜索不到】");
+		boolean notHaveDvd = true;
+		for (int i = 0; i < userHandle.getDVDListSize(); i++) {
+			if (userHandle.getDVDListIndexRentAmount(i) != 0) {
+				notHaveDvd = false;
+			}
+		}
+		if (notHaveDvd) {
+			Toolz.println("您尚未拥有DVD.");
+			return;
+		}
+		Toolz.println("以DVD名退选1\t以DVD在主列表中的编号退选2\n请选择并回车【有的名字可能搜索不到】");/*\t3以DVD在用户已借列表中的编号退选*/
 		int s = Toolz.getInt(in.nextLine());
 		switch (s) {
 		case 1:
@@ -469,7 +488,7 @@ class UserMenu{
 			
 		case 2:
 		{
-			Toolz.println("请输入想要还的DVD编号并回车");
+			Toolz.println("请输入想要还的DVD在主列表中的编号并回车");
 			int index = Toolz.getCompInt(in.nextLine());
 			if ( userHandle.reDVD(index) ) {
 				Toolz.println("归还成功");
@@ -479,6 +498,19 @@ class UserMenu{
 			return;
 		}
 //			break;
+		
+//		case 3:
+//		{
+//			Toolz.println("请输入想要还的DVD在用户已借列表中的编号并回车");
+//			int index = Toolz.getCompInt(in.nextLine());
+//			if (  ) {
+//				Toolz.println("归还成功");
+//			}else {
+//				Toolz.println("归还失败");
+//			}
+//			return;
+//		}
+//		break;
 
 		default:
 			Toolz.println( "输入错误，租借失败。" );
@@ -491,8 +523,9 @@ class UserMenu{
 	private void viewDVDInStyle(Scanner in) {
 		Toolz.println("现有的类型如下：");
 		for (int i = 0; i < this.mainDate.getStyleSize(); i++) {
-			Toolz.print(this.mainDate.getStyle(i) + " ");
+			Toolz.print(this.mainDate.getStyle(i) + ( ( ( ( i + 1 )%5==0) && (0!=i) ) ? "\n" : " " ) );
 		}
+		Toolz.println();
 		Toolz.println();
 		Toolz.println("请输入要限定的类型，多个类型之间请以空格格开：");
 		String inString = in.nextLine();
@@ -503,20 +536,31 @@ class UserMenu{
 				inIDArrayList.add( this.mainDate.getStyleID(a) );
 			}
 		}
+		Toolz.println();
 //		Toolz.println("从输入中解析到的已有类型如下：");
+		if (inIDArrayList.isEmpty()) {
+			Toolz.println("没有从输入内容中找到任何已有的类型名称...");
+			return;
+		}
 		Toolz.println("将以下类型的搜索结果：");
 		for (Long a : inIDArrayList) {
 			Toolz.print( this.mainDate.getStyle(a) + " " );
 		}
 		Toolz.println();
+		Toolz.println();
 		// 搜索
+		boolean t = false;
 		for (int i = 0; i < this.mainDate.getDVDSize(); i++) {
 			for (Long a : inIDArrayList) {
 				if (  this.mainDate.getDVD(i).styleTest(a) ) {
 					Toolz.println( i + ") " + this.getDVDFormartBaseInform(this.mainDate.getDVD(i)) + this.getDVDFormartRBInform(this.mainDate.getDVD(i)) );
+					t = true;
 					break;	// 防止重复显示
 				}
 			}
+		}
+		if (!t) {
+			Toolz.println("什么也没找到....");
 		}
 		Toolz.println();
 	}
@@ -529,17 +573,22 @@ class UserMenu{
 		Toolz.println("请输入一个简短的关键字：");
 		String keyString = in.nextLine();
 		int keySize = keyString.length();
+		boolean t = false;
 		Toolz.println("下面是搜索结果：");
 		for (int i = 0; i < this.mainDate.getDVDSize(); i++) {
 			String targetString = this.mainDate.getDVD(i).getTitle();
 			if (targetString.length() >= keySize) {
 				for (int j = 0; j <= targetString.length() - keySize; j++) {
 					if ( targetString.substring(j, j + keySize).equals(keyString) ) {
+						t = true;
 						Toolz.println( i + ") " + this.getDVDFormartBaseInform(this.mainDate.getDVD(i)) + this.getDVDFormartRBInform(this.mainDate.getDVD(i)) );
 						break;
 					}
 				}
 			}
+		}
+		if (!t) {
+			Toolz.println("没有找到...");
 		}
 	}
 	
@@ -704,6 +753,7 @@ class Toolz {
 	public static void print(Object in) {
 		System.out.print(in);
 	}
+	
 	
 }
 
