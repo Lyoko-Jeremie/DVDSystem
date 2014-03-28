@@ -458,9 +458,19 @@ class UserMenu{
 	/**
 	 * 退
 	 */
-	private void reDVD(Scanner in)
+	private void reDVD(Scanner in)	// TODO  这个功能还要修改
 	{
-		Toolz.println("以DVD名退选1\t以DVD编号退选2\n请选择并回车【有的名字可能搜索不到】");
+		boolean notHaveDvd = true;
+		for (int i = 0; i < userHandle.getDVDListSize(); i++) {
+			if (userHandle.getDVDListIndexRentAmount(i) != 0) {
+				notHaveDvd = false;
+			}
+		}
+		if (notHaveDvd) {
+			Toolz.println("您尚未拥有DVD.");
+			return;
+		}
+		Toolz.println("以DVD名退选1\t以DVD在主列表中的编号退选2\n请选择并回车【有的名字可能搜索不到】");/*\t3以DVD在用户已借列表中的编号退选*/
 		int s = Toolz.getInt(in.nextLine());
 		switch (s) {
 		case 1:
@@ -478,7 +488,7 @@ class UserMenu{
 			
 		case 2:
 		{
-			Toolz.println("请输入想要还的DVD编号并回车");
+			Toolz.println("请输入想要还的DVD在主列表中的编号并回车");
 			int index = Toolz.getCompInt(in.nextLine());
 			if ( userHandle.reDVD(index) ) {
 				Toolz.println("归还成功");
@@ -488,6 +498,19 @@ class UserMenu{
 			return;
 		}
 //			break;
+		
+//		case 3:
+//		{
+//			Toolz.println("请输入想要还的DVD在用户已借列表中的编号并回车");
+//			int index = Toolz.getCompInt(in.nextLine());
+//			if (  ) {
+//				Toolz.println("归还成功");
+//			}else {
+//				Toolz.println("归还失败");
+//			}
+//			return;
+//		}
+//		break;
 
 		default:
 			Toolz.println( "输入错误，租借失败。" );
