@@ -359,6 +359,54 @@ public class ControlMain {
 	public ArrayList<User> getUsersMainDateArrayList() {
 		return new ArrayList<User>(usersMainDateArrayList);
 	}
+	
+	/**
+	 * 添加DVD对象到主数据链<br>
+	 * 以title和id判断相同<br>
+	 * @param dbject
+	 * @return	 没有重复则添加成功返回true
+	 */
+	public boolean addDVD(DVD dbject) {
+		for (DVD a : dVDMainDateArrayList) {
+			if (a.getTitle().equals(dbject.getTitle()) && a.getID() == dbject.getID() ) {
+				return false;
+			}
+		}
+		dVDMainDateArrayList.add(dbject);
+		return true;
+	}
+	
+	/**
+	 * 添加User对象到主数据链<br>
+	 * 以name和password判断重复<br>
+	 * @param ubject
+	 * @return	 没有重复则添加成功返回true
+	 */
+	public boolean addUser(User ubject) {
+		for (User a : usersMainDateArrayList) {
+			if (a.getName().equals(ubject.getName()) && a.getPassword().equals(ubject.getPassword()) ) {
+				return false;
+			}
+		}
+		usersMainDateArrayList.add(ubject);
+		return true;
+	}
+	
+	/**
+	 * 添加Style对象到主数据链<br>
+	 * 以name和id判断重复<br>
+	 * @param sbject
+	 * @return 没有重复则添加成功返回true
+	 */
+	public boolean addStyle(Style sbject) {
+		for (Style a : dVDStyleArrayList) {
+			if (a.getName().equals(sbject.getName()) && a.getID() == sbject.getID()) {
+				return false;
+			}
+		}
+		dVDStyleArrayList.add(sbject);
+		return true;
+	}
 
 	/**
 	 * TODO Test

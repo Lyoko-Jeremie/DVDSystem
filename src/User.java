@@ -352,6 +352,28 @@ public class User {
 		return this.userDVDArrayList.get(index).buyAmount;
 	}
 	
+	/**
+	 * 强制添加一个已拥有的DVD记录<br>
+	 * 这个函数为文件读取而设计<br>
+	 * @param name
+	 * @param ID
+	 * @param rentAmount
+	 * @param buyAmount
+	 * @return
+	 */
+	public boolean addSelfsDVDDate(String name, long ID, int rentAmount, int buyAmount) {
+		for (DVDUser a : this.userDVDArrayList) {	// 数据有效性互斥约束
+			if (a.getName().equals(name)) {
+				return false;
+			}
+			if (a.getID() == ID) {
+				return false;
+			}
+		}
+		this.userDVDArrayList.add( new DVDUser(name, ID, rentAmount, buyAmount) );
+		return true;
+	}
+	
 }
 
 

@@ -250,10 +250,10 @@ public class ControlFile {
 	 * <br>
 	 * 成功返回构造好的对象<br>
 	 * 失败抛出异常<br>
-	 * @return
+	 * @return DVD对象
 	 * @throws Exception
 	 */
-	public DVD readDVD() throws Exception {
+	public DVD readDVD() throws Exception {	// TODO 读取后换行处理
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -311,6 +311,9 @@ public class ControlFile {
 			throw new Exception("Read Error.");
 		}
 		rent = in.nextBoolean();
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
 		if ( !in.nextLine().equals("DVDObjectSB")) {
 			throw new Exception("Read Error.");
 		}
@@ -324,6 +327,9 @@ public class ControlFile {
 			}
 			style.add(in.nextLong());
 		}
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
 		if ( !in.nextLine().equals("DVDObjectSE")) {
 			throw new Exception("Read Error.");
 		}
@@ -332,8 +338,6 @@ public class ControlFile {
 		}
 		return new DVD(title, iD, year, style, amount, sell, rent, byprice, rentPrice, rentAmount);
 	}
-	
-	
 	
 	/**
 	 * 写入一个Style对象
@@ -353,6 +357,47 @@ public class ControlFile {
 		mainWriteHandle.println(sbject.getID());
 		mainWriteHandle.println("StyleObjectE");
 		return true;
+	}
+	
+	/**
+	 * 读取一个Style对象<br>
+	 * 包括前导空行<br>
+	 * <br>
+	 * 成功返回对象 失败抛出异常<br>
+	 * @return Style对象
+	 * @throws Exception
+	 */
+	public Style readStyle() throws Exception {	// TODO 读取后换行处理
+		if ( mainReadHandle == null ) {
+			throw new Exception("Read Handle is null.");
+		}
+		Scanner in = mainReadHandle;
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("StyleObjectB")) {
+			throw new Exception("Read Error.");
+		}
+		String name;
+		Long iD;
+		if (!in.hasNextLine()) {
+			throw new Exception("Read Error.");
+		}
+		name = in.nextLine();
+		if (!in.hasNextLong()) {
+			throw new Exception("Read Error.");
+		}
+		iD = in.nextLong();
+		// 注意：在next具体对象之后跟nextline，会读取到一个空字串
+		// （在next具体对象之后却没有换行的没有字符）
+		// 【实际上这个nextline是取走了具体对象之后的那个换行符】
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("StyleObjectE")) {
+			throw new Exception("Read Error.");
+		}
+		return new Style(name, iD);
 	}
 	
 	/**
@@ -385,6 +430,93 @@ public class ControlFile {
 		mainWriteHandle.println("UserObjectDE");
 		mainWriteHandle.println("UserObjectE");
 		return true;
+	}
+	
+	/**
+	 * 读取一个User对象<br>
+	 * 成功返回对象 失败抛出异常<br>
+	 * @return	User对象
+	 * @throws Exception
+	 */
+	public User readUser() throws Exception {	// TODO 读取后换行处理
+		if ( mainReadHandle == null ) {
+			throw new Exception("Read Handle is null.");
+		}
+		Scanner in = mainReadHandle;
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("UserObjectB")) {
+			throw new Exception("Read Error.");
+		}
+		String name;
+		String password;
+		double money;
+		if ( !in.hasNextLine()) {
+			throw new Exception("Read Error.");
+		}
+		name = in.nextLine();
+		if ( !in.hasNextLine()) {
+			throw new Exception("Read Error.");
+		}
+		password = in.nextLine();
+		if ( !in.hasNextDouble()) {
+			throw new Exception("Read Error.");
+		}
+		money = in.nextDouble();
+		User Temp = new User(name,password,money,mainDate.getDVDMainDateArrayList());
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("UserObjectDB")) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.hasNextInt()) {
+			throw new Exception("Read Error.");
+		}
+		int size = in.nextInt();
+		if ( !in.nextLine().isEmpty()) {
+			throw new Exception("Read Error.");
+		}
+		for (int i = 0; i < size; i++) {
+			if ( !in.nextLine().equals("UserObjectDUB")) {
+				throw new Exception("Read Error.");
+			}
+			String named;
+			long ID;
+			int rentAmount;
+			int buyAmount;
+			if ( !in.hasNextLine()) {
+				throw new Exception("Read Error.");
+			}
+			named = in.nextLine();
+			if ( !in.hasNextLong()) {
+				throw new Exception("Read Error.");
+			}
+			ID = in.nextLong();
+			if ( !in.hasNextInt()) {
+				throw new Exception("Read Error.");
+			}
+			buyAmount = in.nextInt();
+			if ( !in.hasNextInt()) {
+				throw new Exception("Read Error.");
+			}
+			rentAmount = in.nextInt();
+			if ( !in.nextLine().isEmpty()) {
+				throw new Exception("Read Error.");
+			}
+			Temp.addSelfsDVDDate(named, ID, rentAmount, buyAmount);
+			if ( !in.nextLine().equals("UserObjectDUE")) {
+				throw new Exception("Read Error.");
+			}
+		}
+		if ( !in.nextLine().equals("UserObjectDE")) {
+			throw new Exception("Read Error.");
+		}
+		if ( !in.nextLine().equals("UserObjectE")) {
+			throw new Exception("Read Error.");
+		}
+		return Temp;
 	}
 	
 	/**
@@ -443,5 +575,112 @@ public class ControlFile {
 		return true;
 	}
 	
+	/**
+	 * 读取整个文件所有数据并追加到主数据中<br>
+	 * @return 正常完成读取返回true 任何的读取失败返回false
+	 */
+	public boolean readMainDate() {
+		if ( mainReadHandle == null) {
+			return false;
+		}
+		Scanner in = mainReadHandle;
+		for (String a : FILE_VERSION_STRINGS) {
+			if ( !in.hasNextLine() || !in.nextLine().equals(a)) {
+				return false;
+			}
+		}
+		if ( !in.nextLine().isEmpty()) {
+			return false;
+		}
+		if ( !in.nextLine().equals("FileB")) {
+			return false;
+		}
+		if ( !in.nextLine().isEmpty()) {
+			return false;
+		}
+		if ( !in.nextLine().equals("StyleListB")) {
+			return false;
+		}
+		{
+			int size;
+			if ( !in.hasNextInt()) {
+				return false;
+			}
+			size = in.nextInt();
+			in.hasNextLine(); // Test
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			for (int i = 0; i < size; i++) {
+				try {
+					mainDate.addStyle(this.readStyle());
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		}
+		if ( !in.nextLine().equals("StyleListE")) {
+			return false;
+		}
+		if ( !in.nextLine().isEmpty()) {
+			return false;
+		}
+		if ( !in.nextLine().equals("DVDListB")) {
+			return false;
+		}
+		{
+			int size;
+			if ( !in.hasNextInt()) {
+				return false;
+			}
+			size = in.nextInt();
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			for (int i = 0; i < size; i++) {
+				try {
+					mainDate.addDVD(this.readDVD());
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		}
+		if ( !in.nextLine().equals("DVDListE")) {
+			return false;
+		}
+		if ( !in.nextLine().isEmpty()) {
+			return false;
+		}
+		if ( !in.nextLine().equals("UserListB")) {
+			return false;
+		}
+		{
+			int size;
+			if ( !in.hasNextInt()) {
+				return false;
+			}
+			size = in.nextInt();
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			for (int i = 0; i < size; i++) {
+				try {
+					mainDate.addUser(this.readUser());
+				} catch (Exception e) {
+					return false;
+				}
+			}
+		}
+		if ( !in.nextLine().equals("UserListE")) {
+			return false;
+		}
+		if ( !in.nextLine().isEmpty()) {
+			return false;
+		}
+		if ( !in.nextLine().equals("FileE")) {
+			return false;
+		}
+		return true;
+	}
 
 }
