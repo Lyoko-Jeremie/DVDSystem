@@ -23,14 +23,14 @@ public class User {
 	private String password;
 	
 	/**
-	 * 已经买到的和已经借到的DVD列
-	 */
-	private ArrayList<DVDUser> userDVDArrayList;
-	
-	/**
 	 * 现金
 	 */
 	private double money;
+	
+	/**
+	 * 已经买到的和已经借到的DVD列
+	 */
+	private ArrayList<DVDUser> userDVDArrayList;
 	
 	/**
 	 * 指向主数据链的句柄
@@ -299,6 +299,20 @@ public class User {
 	}
 	
 	/**
+	 * @return money
+	 */
+	public double getMoney() {
+		return money;
+	}
+
+	/**
+	 * @param money 要设置的 money
+	 */
+	public void setMoney(double money) {
+		this.money = money;
+	}
+
+	/**
 	 * 获取拥有DVD列表总数
 	 * @return int
 	 */
@@ -336,6 +350,28 @@ public class User {
 	 */
 	public int getDVDListIndexBuyAmount(int index) {
 		return this.userDVDArrayList.get(index).buyAmount;
+	}
+	
+	/**
+	 * 强制添加一个已拥有的DVD记录<br>
+	 * 这个函数为文件读取而设计<br>
+	 * @param name
+	 * @param ID
+	 * @param rentAmount
+	 * @param buyAmount
+	 * @return
+	 */
+	public boolean addSelfsDVDDate(String name, long ID, int rentAmount, int buyAmount) {
+		for (DVDUser a : this.userDVDArrayList) {	// 数据有效性互斥约束
+			if (a.getName().equals(name)) {
+				return false;
+			}
+			if (a.getID() == ID) {
+				return false;
+			}
+		}
+		this.userDVDArrayList.add( new DVDUser(name, ID, rentAmount, buyAmount) );
+		return true;
 	}
 	
 }

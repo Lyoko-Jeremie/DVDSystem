@@ -28,6 +28,11 @@ public class ControlMain {
 	private ArrayList<User> usersMainDateArrayList;
 	
 	/**
+	 * 文件操作类
+	 */
+	private ControlFile mainFile;
+	
+	/**
 	 * 反多对象保护
 	 */
 	private static int PRO = 0;
@@ -46,6 +51,8 @@ public class ControlMain {
 		this.dVDMainDateArrayList = new ArrayList<DVD>();
 		this.dVDStyleArrayList = new ArrayList<Style>();
 		this.usersMainDateArrayList = new ArrayList<User>();
+		this.mainFile = new ControlFile("DVDSystemDate.DVDSystemDAteBaseFile", this);
+//		this.mainFile = new ControlFile("C:\\", this);
 	}
 	
 	/**
@@ -327,6 +334,86 @@ public class ControlMain {
 			return ( ( t != null )? t : "" );
 		}
 		return "";
+	}
+
+	/**
+	 * @return dVDMainDateArrayList
+	 * Waring:低效
+	 */
+	public ArrayList<DVD> getDVDMainDateArrayList() {
+		return new  ArrayList<DVD>(dVDMainDateArrayList);
+	}
+
+	/**
+	 * @return dVDStyleArrayList
+	 * Waring:低效
+	 */
+	public ArrayList<Style> getDVDStyleArrayList() {
+		return new ArrayList<Style>(dVDStyleArrayList);
+	}
+
+	/**
+	 * @return usersMainDateArrayList
+	 * Waring:低效
+	 */
+	public ArrayList<User> getUsersMainDateArrayList() {
+		return new ArrayList<User>(usersMainDateArrayList);
+	}
+	
+	/**
+	 * 添加DVD对象到主数据链<br>
+	 * 以title和id判断相同<br>
+	 * @param dbject
+	 * @return	 没有重复则添加成功返回true
+	 */
+	public boolean addDVD(DVD dbject) {
+		for (DVD a : dVDMainDateArrayList) {
+			if (a.getTitle().equals(dbject.getTitle()) && a.getID() == dbject.getID() ) {
+				return false;
+			}
+		}
+		dVDMainDateArrayList.add(dbject);
+		return true;
+	}
+	
+	/**
+	 * 添加User对象到主数据链<br>
+	 * 以name和password判断重复<br>
+	 * @param ubject
+	 * @return	 没有重复则添加成功返回true
+	 */
+	public boolean addUser(User ubject) {
+		for (User a : usersMainDateArrayList) {
+			if (a.getName().equals(ubject.getName()) && a.getPassword().equals(ubject.getPassword()) ) {
+				return false;
+			}
+		}
+		usersMainDateArrayList.add(ubject);
+		return true;
+	}
+	
+	/**
+	 * 添加Style对象到主数据链<br>
+	 * 以name和id判断重复<br>
+	 * @param sbject
+	 * @return 没有重复则添加成功返回true
+	 */
+	public boolean addStyle(Style sbject) {
+		for (Style a : dVDStyleArrayList) {
+			if (a.getName().equals(sbject.getName()) && a.getID() == sbject.getID()) {
+				return false;
+			}
+		}
+		dVDStyleArrayList.add(sbject);
+		return true;
+	}
+
+	/**
+	 * TODO Test
+	 * @return mainFile
+	 */
+	public ControlFile getMainFile() {
+		return mainFile;
 	}
 	
 	

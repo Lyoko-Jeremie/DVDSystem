@@ -160,6 +160,40 @@ public class DVD {
 		this.rentLimit = RENT_LIMIT;
 	}
 	/**
+	 * 构造所有数据，这个方法为文件读取而设计<br>
+	 * style != null<br>
+	 * sellLimit = SELL_LIMIT<br>
+	 * rentLimit = RENT_LIMIT<br>
+	 * @param title
+	 * @param ID
+	 * @param year
+	 * @param style
+	 * @param amount
+	 * @param sell
+	 * @param rent
+	 * @param buyprice
+	 * @param rentPrice
+	 * @param rentAmount
+	 */
+	public DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
+		this.title = title;
+		this.ID = iD;
+		this.year = year;
+		if (style != null) {
+			this.style = style;
+		} else {
+			throw new ExceptionInInitializerError("style cant are null");
+		}
+		this.amount = amount;
+		this.sell = sell;
+		this.rent =  rent;
+		this.buyPrice = byprice;
+		this.rentPrice = rentPrice;
+		this.rentAmount = rentAmount;
+		this.sellLimit = SELL_LIMIT;
+		this.rentLimit = RENT_LIMIT;
+	}
+	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
 	 * 无需设置rentAmount<br>
 	 * style != null<br>
@@ -311,9 +345,13 @@ public class DVD {
 	}
 	/**
 	 * 重设整个的 style
-	 * @param style
+	 * @param style	不能为null
+	 * @throws Exception 
 	 */
-	public void styleSetALL(ArrayList<Long> style) {
+	public void styleSetALL(ArrayList<Long> style) throws Exception {
+		if (style == null) {
+			throw new Exception("Cant Are null.");
+		}
 		this.style = style;
 	}
 	/**
