@@ -96,7 +96,7 @@ public class DVD {
 	}
 	/**
 	 * 构造方法<br>
-	 * style != null<br>
+	 * style <> null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
@@ -108,7 +108,7 @@ public class DVD {
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public DVD( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
+	public DVD( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -119,7 +119,7 @@ public class DVD {
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.buyPrice = byprice;
+		this.buyPrice = buyprice;
 		this.rentPrice = rentPrice;
 		this.rentAmount = 0;
 		this.sellLimit = SELL_LIMIT;
@@ -129,7 +129,7 @@ public class DVD {
 	}
 	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
-	 * style != null<br>
+	 * style <> null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
@@ -142,7 +142,7 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
+	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -153,7 +153,7 @@ public class DVD {
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.buyPrice = byprice;
+		this.buyPrice = buyprice;
 		this.rentPrice = rentPrice;
 		this.rentAmount = rentAmount;
 		this.sellLimit = SELL_LIMIT;
@@ -161,11 +161,11 @@ public class DVD {
 	}
 	/**
 	 * 构造所有数据，这个方法为文件读取而设计<br>
-	 * style != null<br>
+	 * style <> null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
-	 * @param ID
+	 * @param iD
 	 * @param year
 	 * @param style
 	 * @param amount
@@ -175,7 +175,7 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount) {
+	public DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.ID = iD;
 		this.year = year;
@@ -187,7 +187,7 @@ public class DVD {
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.buyPrice = byprice;
+		this.buyPrice = buyprice;
 		this.rentPrice = rentPrice;
 		this.rentAmount = rentAmount;
 		this.sellLimit = SELL_LIMIT;
@@ -196,7 +196,7 @@ public class DVD {
 	/**
 	 * 设置所有数据，这个方法为数组的数据延迟设置而设计<br>
 	 * 无需设置rentAmount<br>
-	 * style != null<br>
+	 * style <> null<br>
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 * @param title
@@ -208,7 +208,7 @@ public class DVD {
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice) {
+	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -219,7 +219,7 @@ public class DVD {
 		this.amount = amount;
 		this.sell = sell;
 		this.rent =  rent;
-		this.buyPrice = byprice;
+		this.buyPrice = buyprice;
 		this.rentPrice = rentPrice;
 		this.rentAmount = 0;
 		this.sellLimit = SELL_LIMIT;

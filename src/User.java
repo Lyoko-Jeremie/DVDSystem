@@ -108,15 +108,15 @@ public class User {
 
 	/**
 	 * 借一个DVD<br>
-	 * @param DVD
-	 * @return	 钱不够or没法借返回false
+	 * @param dvdObject
+	 * @return	 bool 钱不够or没法借返回false
 	 */
-	public boolean rentDVD(DVD temp) {
-		if (this.money >= temp.getRentPrice()) {
+	public boolean rentDVD(DVD dvdObject) {
+		if (this.money >= dvdObject.getRentPrice()) {
 			// 钱够
-			if ( temp.rentOne()) {
+			if ( dvdObject.rentOne()) {
 				// 能借
-				this.addRentDate( temp.getTitle(), temp.getID());
+				this.addRentDate( dvdObject.getTitle(), dvdObject.getID());
 				return true;
 			}
 		}
@@ -220,15 +220,15 @@ public class User {
 	
 	/**
 	 * 买一个DVD<br>
-	 * @param DVD
-	 * @return		钱不够or没法借返回false
+	 * @param dvdObject
+	 * @return	 bool 钱不够or没法借返回false
 	 */
-	public boolean buyDVD(DVD temp) {
-		if (this.money >= temp.getBuyPrice()) {
+	public boolean buyDVD(DVD dvdObject) {
+		if (this.money >= dvdObject.getBuyPrice()) {
 			// 钱够
-			if (temp.sellOne()) {
+			if (dvdObject.sellOne()) {
 				// 能买
-				this.addBuyDate(temp.getTitle(), temp.getID());
+				this.addBuyDate(dvdObject.getTitle(), dvdObject.getID());
 				return true;
 			}
 		}
@@ -359,7 +359,7 @@ public class User {
 	 * @param ID
 	 * @param rentAmount
 	 * @param buyAmount
-	 * @return
+	 * @return bool
 	 */
 	public boolean addSelfsDVDDate(String name, long ID, int rentAmount, int buyAmount) {
 		for (DVDUser a : this.userDVDArrayList) {	// 数据有效性互斥约束

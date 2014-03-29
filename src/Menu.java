@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 /**
  * 菜单<br>
- * TODO 菜单也要预留可扩展空间，特别是预留用户验证部分和管理员菜单<br>
  */
 
 /**
+ * 菜单
  * @author Jeremie
  *
  */
@@ -30,7 +30,6 @@ public class Menu {
 	
 	/**
 	 * 唯一的无参构造函数<br>
-	 * @param mainDate
 	 */
 	public Menu() {
 		if ( Menu.PRO>0) {
@@ -58,20 +57,56 @@ public class Menu {
 	 */
 	public void mainMenu( Scanner in){
 		
-		{
-			//TODO 测试用数据初始化，没有文件时使用的方法
-			Test.init(mainDate);
-		}
+//		{
+//			Test.init(mainDate);
+//		}
+		
 		
 		// 初始化&启动提示
+		try {
+			if (mainDate.LoadDate()) {
+				Toolz.println("成功读取数据库");
+				Toolz.println();
+			}
+		} catch (Exception e) {
+			Toolz.println( "读取数据文件失败：" + e.getMessage());
+			Toolz.println("没有DVD数据");
+			Toolz.println();
+		}
 		Toolz.println("欢迎进入DVD租买系统");
+		
+		
+		
 		
 		// 现在只是有用户界面，这个位置为扩展管理界面而预留
 		this.userMenuHandle = new UserMenu(mainDate, "");
 		this.userMenuHandle.menu(in);
 		
-		//TODO 整个系统退出
+		
+		
+		
+		//结束&退出保存
 		Toolz.println("谢谢使用DVD租买系统");
+		boolean t = false;
+		do {
+			try {
+				if (mainDate.saveDate()) {
+					Toolz.println("数据保存完毕");
+				}
+			} catch (Exception e) {
+				Toolz.println( "保存数据失败：" + e.getMessage());
+				Toolz.println("已有的文件可能已经破坏。");
+				Toolz.println("还要尝试保存吗？\t输入1：是\t其他：否");
+				if (Toolz.getCompInt(in.nextLine()) == 1) {
+					t = true;
+					continue;
+				}else {
+					t = false;
+				}
+			}
+			t = false;
+		} while (t);
+		
 
 	}
 	
@@ -277,7 +312,7 @@ class UserMenu{
 	/**
 	 * 返回格式化的DVD可租买信息
 	 * @param t
-	 * @return
+	 * @return String 格式化的DVD可租买信息
 	 */
 	private String getDVDFormartRBInform(DVD t) {
 		String f = new String();
@@ -299,7 +334,7 @@ class UserMenu{
 	/**
 	 * 返回格式化的基本DVD信息
 	 * @param t
-	 * @return
+	 * @return String 格式化的基本DVD信息
 	 */
 	private String getDVDFormartBaseInform(DVD t) {
 		String f = new String( t.getTitle() + " ; " + t.getYear() + "年 ; " );
@@ -606,7 +641,7 @@ class UserMenu{
  * @author Jeremie
  *
  */
-class Toolz {
+class  Toolz {
 	
 	/**
 	 * 禁用构造函数

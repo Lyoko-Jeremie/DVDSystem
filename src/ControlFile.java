@@ -10,6 +10,7 @@ import java.util.Scanner;
  */
 
 /**
+ * 文件操作类
  * @author Jeremie
  *
  */
@@ -48,7 +49,7 @@ public class ControlFile {
 	
 	/**
 	 * 文件是否存在
-	 * @return
+	 * @return bool
 	 */
 	public boolean isFileExists() {
 		return mainFile.exists();
@@ -106,7 +107,7 @@ public class ControlFile {
 	
 	/**
 	 * 打开读取用文件句柄
-	 * @return
+	 * @return bool
 	 */
 	public boolean openReadHandle() {
 		if (mainReadHandle == null) {
@@ -121,7 +122,7 @@ public class ControlFile {
 	
 	/**
 	 * 读取用文件句柄是否打开
-	 * @return
+	 * @return bool
 	 */
 	public boolean isOpenReadHandle() {
 		if ( mainReadHandle == null ) {
@@ -158,7 +159,7 @@ public class ControlFile {
 	
 	/**
 	 * 打开写入用文件句柄
-	 * @return
+	 * @return bool
 	 */
 	public boolean openWriteHandle() {
 		if (mainWriteHandle == null) {
@@ -173,7 +174,7 @@ public class ControlFile {
 	
 	/**
 	 * 写入用文件句柄是否打开
-	 * @return
+	 * @return bool
 	 */
 	public boolean isOpenWriteHandle() {
 		if ( mainWriteHandle == null ) {
@@ -253,7 +254,7 @@ public class ControlFile {
 	 * @return DVD对象
 	 * @throws Exception
 	 */
-	public DVD readDVD() throws Exception {	// TODO 读取后换行处理
+	public DVD readDVD() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -367,7 +368,7 @@ public class ControlFile {
 	 * @return Style对象
 	 * @throws Exception
 	 */
-	public Style readStyle() throws Exception {	// TODO 读取后换行处理
+	public Style readStyle() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -438,7 +439,7 @@ public class ControlFile {
 	 * @return	User对象
 	 * @throws Exception
 	 */
-	public User readUser() throws Exception {	// TODO 读取后换行处理
+	public User readUser() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}

@@ -95,13 +95,13 @@ public class Test {
 //			TR.getMainFile().closeWriteHandle();
 //		}
 		
-		{
-			System.out.println(TR.getMainFile().createNewFile());
-			System.out.println(TR.getMainFile().openReadHandle());
-			System.out.println(TR.getMainFile().isOpenReadHandle());
-			System.out.println(TR.getMainFile().readMainDate());
-			TR.getMainFile().closeReadHandle();
-		}
+//		{
+//			//System.out.println(TR.getMainFile().createNewFile());
+//			System.out.println(TR.getMainFile().openReadHandle());
+//			System.out.println(TR.getMainFile().isOpenReadHandle());
+//			System.out.println(TR.getMainFile().readMainDate());
+//			TR.getMainFile().closeReadHandle();
+//		}
 		
 	}
 

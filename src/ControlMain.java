@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 /**
  * 主系统主要结构<br>
+ * 同时只能使用一个<br>
  * @author Jeremie
  */
 public class ControlMain {
 	
 	/**
 	 * DVD主数组结构<br>
-	 * User中DVDUser以DVD下标辨识DVD，所以不可删除<br>
 	 */
 	private ArrayList<DVD> dVDMainDateArrayList;
 	
@@ -40,7 +40,9 @@ public class ControlMain {
 	
 	/**
 	 * 唯一的构造方法<br>
-	 * 初始化主数组结构ArrayList
+	 * 做反多对象保护操作<br>
+	 * 初始化所有主数组结构<br>
+	 * 并设置数据库文件<br>
 	 */
 	public ControlMain() {
 		if ( ControlMain.PRO>0) {
@@ -73,7 +75,7 @@ public class ControlMain {
 	 * @param amount
 	 * @param sell
 	 * @param rent
-	 * @param buyprice
+	 * @param buyPrice
 	 * @param rentPrice
 	 */
 	public void addDVD(String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
@@ -86,7 +88,7 @@ public class ControlMain {
 	 * @param year
 	 * @param style	以空格分离的风格字串 如为空字串或为null则自动为空
 	 * @param amount
-	 * @param buyprice
+	 * @param buyPrice
 	 * @param rentPrice
 	 */
 	public void addDVD(String title, int year, String style, int amount, double buyPrice, double rentPrice) {
@@ -120,7 +122,7 @@ public class ControlMain {
 	 * @param year
 	 * @param style	
 	 * @param amount
-	 * @param buyprice
+	 * @param buyPrice
 	 * @param rentPrice
 	 */
 	public void addDVD(String title, int year, ArrayList<Long> style, int amount, double buyPrice, double rentPrice) {
@@ -187,7 +189,7 @@ public class ControlMain {
 	/**
 	 * 从Style名获取ID<br>
 	 * <br>
-	 * @param Index
+	 * @param style
 	 * @return	找不到，返回0
 	 */
 	public long getStyleID(String style){
@@ -310,7 +312,7 @@ public class ControlMain {
 	/**
 	 * 获取指定DVD对象<br>
 	 * 查找用<br>
-	 * @param ID		名字
+	 * @param iD		名字
 	 * @return		找不到返回null
 	 */
 	public DVD getDVD(long iD) {
@@ -407,14 +409,40 @@ public class ControlMain {
 		dVDStyleArrayList.add(sbject);
 		return true;
 	}
-
+	
 	/**
-	 * TODO Test
-	 * @return mainFile
+	 * 保存数据
+	 * @return 成功返回true
+	 * @throws Exception 失败抛出异常 异常的string包含了出现异常的位置信息
 	 */
-	public ControlFile getMainFile() {
-		return mainFile;
+	public boolean saveDate() throws Exception {
+		if (!mainFile.createNewFile()) {
+			throw new Exception("Cant Create File.");
+		}
+		if (!mainFile.openWriteHandle()) {
+			throw new Exception("Cant Open File.");
+		}
+		if (!mainFile.writeMainDate()) {
+			throw new Exception("Save is Fail.");
+		}
+		mainFile.closeWriteHandle();
+		return true;
 	}
 	
-	
+	/**
+	 * 读取数据
+	 * @return 成功返回true
+	 * @throws Exception 失败抛出异常 异常的string包含了出现异常的位置信息
+	 */
+	public boolean LoadDate() throws Exception {
+		if (!mainFile.openReadHandle()) {
+			throw new Exception("Cant Open File.");
+		}
+		if (!mainFile.readMainDate()) {
+			throw new Exception("Load is Fail.");
+		}
+		mainFile.closeReadHandle();
+		return true;
+	}
+
 }
