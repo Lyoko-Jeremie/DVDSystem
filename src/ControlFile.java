@@ -18,7 +18,7 @@ public class ControlFile {
 	
 	private File mainFile;
 	
-	private Scanner mainReadHandle;
+	private Read mainReadHandle;
 	
 	private PrintWriter mainWriteHandle;
 	
@@ -112,7 +112,7 @@ public class ControlFile {
 	public boolean openReadHandle() {
 		if (mainReadHandle == null) {
 			try {
-				mainReadHandle = new Scanner(mainFile);
+				mainReadHandle = new Read(mainFile);
 			} catch (FileNotFoundException e) {
 				return false;
 			}
@@ -136,8 +136,12 @@ public class ControlFile {
 	 * @return	句柄为null or 没有下一行 则返回 null
 	 */
 	public String readNextLN() {
-		if ( mainReadHandle != null && mainReadHandle.hasNextLine() ) {
-			return mainReadHandle.nextLine();
+		if ( mainReadHandle != null) {
+			try {
+				return mainReadHandle.nextLine();
+			} catch (Exception e) {
+				return null;
+			}
 		}
 		return null;
 	}
@@ -147,7 +151,7 @@ public class ControlFile {
 	 * @return	句柄为null or 没有下一个int 则返回 null
 	 */
 	public Integer readNextInt() {
-		if ( mainReadHandle != null && mainReadHandle.hasNextLine() ) {
+		if ( mainReadHandle != null ) {
 			try {
 				return mainReadHandle.nextInt();
 			} catch (Exception e) {
@@ -258,7 +262,7 @@ public class ControlFile {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
-		Scanner in = mainReadHandle;
+		Read in = mainReadHandle;
 		if ( !in.nextLine().isEmpty()) {
 			throw new Exception("Read Error.");
 		}
@@ -266,70 +270,22 @@ public class ControlFile {
 			throw new Exception("Read Error.");
 		}
 		// String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount
-		String title;
-		long iD;
-		int year;
-		ArrayList<Long> style = new ArrayList<Long>();
-		int amount;
-		boolean sell;
-		boolean rent;
-		double byprice;
-		double rentPrice;
-		int rentAmount;
-		if ( !in.hasNextLine() ) {
-			throw new Exception("Read Error.");
-		}
-		title = in.nextLine();
-		if ( !in.hasNextLong() ) {
-			throw new Exception("Read Error.");
-		}
-		iD = in.nextLong();
-		if ( !in.hasNextInt() ) {
-			throw new Exception("Read Error.");
-		}
-		year = in.nextInt();
-		if ( !in.hasNextInt() ) {
-			throw new Exception("Read Error.");
-		}
-		amount = in.nextInt();
-		if ( !in.hasNextDouble() ) {
-			throw new Exception("Read Error.");
-		}
-		byprice = in.nextDouble();
-		if ( !in.hasNextDouble() ) {
-			throw new Exception("Read Error.");
-		}
-		rentPrice = in.nextDouble();
-		if ( !in.hasNextInt() ) {
-			throw new Exception("Read Error.");
-		}
-		rentAmount = in.nextInt();
-		if ( !in.hasNextBoolean() ) {
-			throw new Exception("Read Error.");
-		}
-		sell = in.nextBoolean();
-		if ( !in.hasNextBoolean() ) {
-			throw new Exception("Read Error.");
-		}
-		rent = in.nextBoolean();
-		if ( !in.nextLine().isEmpty()) {
-			throw new Exception("Read Error.");
-		}
+		String title = in.nextLine();
+		long iD = in.nextLong();
+		int year = in.nextInt();
+		int amount = in.nextInt();
+		double buyprice = in.nextDouble();
+		double rentPrice = in.nextDouble();
+		int rentAmount = in.nextInt();
+		boolean sell = in.nextBoolean();
+		boolean rent = in.nextBoolean();
 		if ( !in.nextLine().equals("DVDObjectSB")) {
 			throw new Exception("Read Error.");
 		}
-		if ( !in.hasNextInt() ) {
-			throw new Exception("Read Error.");
-		}
+		ArrayList<Long> style = new ArrayList<Long>();
 		int iTemp = in.nextInt();
 		for (int i = 0; i < iTemp; i++) {
-			if ( !in.hasNextLong() ) {
-				throw new Exception("Read Error.");
-			}
 			style.add(in.nextLong());
-		}
-		if ( !in.nextLine().isEmpty()) {
-			throw new Exception("Read Error.");
 		}
 		if ( !in.nextLine().equals("DVDObjectSE")) {
 			throw new Exception("Read Error.");
@@ -337,7 +293,7 @@ public class ControlFile {
 		if ( !in.nextLine().equals("DVDObjectE")) {
 			throw new Exception("Read Error.");
 		}
-		return new DVD(title, iD, year, style, amount, sell, rent, byprice, rentPrice, rentAmount);
+		return new DVD(title, iD, year, style, amount, sell, rent, buyprice, rentPrice, rentAmount);
 	}
 	
 	/**
@@ -372,7 +328,7 @@ public class ControlFile {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
-		Scanner in = mainReadHandle;
+		Read in = mainReadHandle;
 		if ( !in.nextLine().isEmpty()) {
 			throw new Exception("Read Error.");
 		}
@@ -381,20 +337,12 @@ public class ControlFile {
 		}
 		String name;
 		Long iD;
-		if (!in.hasNextLine()) {
-			throw new Exception("Read Error.");
-		}
 		name = in.nextLine();
-		if (!in.hasNextLong()) {
-			throw new Exception("Read Error.");
-		}
 		iD = in.nextLong();
 		// 注意：在next具体对象之后跟nextline，会读取到一个空字串
 		// （在next具体对象之后却没有换行的没有字符）
 		// 【实际上这个nextline是取走了具体对象之后的那个换行符】
-		if ( !in.nextLine().isEmpty()) {
-			throw new Exception("Read Error.");
-		}
+		// Note：以上问题已经在Read类中以包装形式解决了
 		if ( !in.nextLine().equals("StyleObjectE")) {
 			throw new Exception("Read Error.");
 		}
@@ -443,7 +391,7 @@ public class ControlFile {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
-		Scanner in = mainReadHandle;
+		Read in = mainReadHandle;
 		if ( !in.nextLine().isEmpty()) {
 			throw new Exception("Read Error.");
 		}
@@ -453,59 +401,22 @@ public class ControlFile {
 		String name;
 		String password;
 		double money;
-		if ( !in.hasNextLine()) {
-			throw new Exception("Read Error.");
-		}
 		name = in.nextLine();
-		if ( !in.hasNextLine()) {
-			throw new Exception("Read Error.");
-		}
 		password = in.nextLine();
-		if ( !in.hasNextDouble()) {
-			throw new Exception("Read Error.");
-		}
 		money = in.nextDouble();
 		User Temp = new User(name,password,money,mainDate.getDVDMainDateArrayList());
-		if ( !in.nextLine().isEmpty()) {
-			throw new Exception("Read Error.");
-		}
 		if ( !in.nextLine().equals("UserObjectDB")) {
 			throw new Exception("Read Error.");
 		}
-		if ( !in.hasNextInt()) {
-			throw new Exception("Read Error.");
-		}
 		int size = in.nextInt();
-		if ( !in.nextLine().isEmpty()) {
-			throw new Exception("Read Error.");
-		}
 		for (int i = 0; i < size; i++) {
 			if ( !in.nextLine().equals("UserObjectDUB")) {
 				throw new Exception("Read Error.");
 			}
-			String named;
-			long ID;
-			int rentAmount;
-			int buyAmount;
-			if ( !in.hasNextLine()) {
-				throw new Exception("Read Error.");
-			}
-			named = in.nextLine();
-			if ( !in.hasNextLong()) {
-				throw new Exception("Read Error.");
-			}
-			ID = in.nextLong();
-			if ( !in.hasNextInt()) {
-				throw new Exception("Read Error.");
-			}
-			buyAmount = in.nextInt();
-			if ( !in.hasNextInt()) {
-				throw new Exception("Read Error.");
-			}
-			rentAmount = in.nextInt();
-			if ( !in.nextLine().isEmpty()) {
-				throw new Exception("Read Error.");
-			}
+			String named = in.nextLine();
+			long ID = in.nextLong();
+			int buyAmount = in.nextInt();
+			int rentAmount = in.nextInt();
 			Temp.addSelfsDVDDate(named, ID, rentAmount, buyAmount);
 			if ( !in.nextLine().equals("UserObjectDUE")) {
 				throw new Exception("Read Error.");
@@ -581,107 +492,223 @@ public class ControlFile {
 	 * @return 正常完成读取返回true 任何的读取失败返回false
 	 */
 	public boolean readMainDate() {
-		if ( mainReadHandle == null) {
-			return false;
-		}
-		Scanner in = mainReadHandle;
-		for (String a : FILE_VERSION_STRINGS) {
-			if ( !in.hasNextLine() || !in.nextLine().equals(a)) {
+		try {
+			if ( mainReadHandle == null) {
 				return false;
 			}
-		}
-		if ( !in.nextLine().isEmpty()) {
-			return false;
-		}
-		if ( !in.nextLine().equals("FileB")) {
-			return false;
-		}
-		if ( !in.nextLine().isEmpty()) {
-			return false;
-		}
-		if ( !in.nextLine().equals("StyleListB")) {
-			return false;
-		}
-		{
-			int size;
-			if ( !in.hasNextInt()) {
-				return false;
-			}
-			size = in.nextInt();
-			in.hasNextLine(); // Test
-			if ( !in.nextLine().isEmpty()) {
-				return false;
-			}
-			for (int i = 0; i < size; i++) {
-				try {
-					mainDate.addStyle(this.readStyle());
-				} catch (Exception e) {
+			Read in = mainReadHandle;
+			for (String a : FILE_VERSION_STRINGS) {
+				if ( !in.nextLine().equals(a)) {
 					return false;
 				}
 			}
-		}
-		if ( !in.nextLine().equals("StyleListE")) {
-			return false;
-		}
-		if ( !in.nextLine().isEmpty()) {
-			return false;
-		}
-		if ( !in.nextLine().equals("DVDListB")) {
-			return false;
-		}
-		{
-			int size;
-			if ( !in.hasNextInt()) {
-				return false;
-			}
-			size = in.nextInt();
 			if ( !in.nextLine().isEmpty()) {
 				return false;
 			}
-			for (int i = 0; i < size; i++) {
-				try {
-					mainDate.addDVD(this.readDVD());
-				} catch (Exception e) {
-					return false;
-				}
-			}
-		}
-		if ( !in.nextLine().equals("DVDListE")) {
-			return false;
-		}
-		if ( !in.nextLine().isEmpty()) {
-			return false;
-		}
-		if ( !in.nextLine().equals("UserListB")) {
-			return false;
-		}
-		{
-			int size;
-			if ( !in.hasNextInt()) {
+			if ( !in.nextLine().equals("FileB")) {
 				return false;
 			}
-			size = in.nextInt();
 			if ( !in.nextLine().isEmpty()) {
 				return false;
 			}
-			for (int i = 0; i < size; i++) {
-				try {
-					mainDate.addUser(this.readUser());
-				} catch (Exception e) {
-					return false;
+			if ( !in.nextLine().equals("StyleListB")) {
+				return false;
+			}
+			{
+				int size = in.nextInt();
+				for (int i = 0; i < size; i++) {
+					try {
+						mainDate.addStyle(this.readStyle());
+					} catch (Exception e) {
+						return false;
+					}
 				}
 			}
-		}
-		if ( !in.nextLine().equals("UserListE")) {
+			if ( !in.nextLine().equals("StyleListE")) {
+				return false;
+			}
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			if ( !in.nextLine().equals("DVDListB")) {
+				return false;
+			}
+			{
+				int size = in.nextInt();
+				for (int i = 0; i < size; i++) {
+					try {
+						mainDate.addDVD(this.readDVD());
+					} catch (Exception e) {
+						return false;
+					}
+				}
+			}
+			if ( !in.nextLine().equals("DVDListE")) {
+				return false;
+			}
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			if ( !in.nextLine().equals("UserListB")) {
+				return false;
+			}
+			{
+				int size = in.nextInt();
+				for (int i = 0; i < size; i++) {
+					try {
+						mainDate.addUser(this.readUser());
+					} catch (Exception e) {
+						return false;
+					}
+				}
+			}
+			if ( !in.nextLine().equals("UserListE")) {
+				return false;
+			}
+			if ( !in.nextLine().isEmpty()) {
+				return false;
+			}
+			if ( !in.nextLine().equals("FileE")) {
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
 			return false;
 		}
-		if ( !in.nextLine().isEmpty()) {
-			return false;
-		}
-		if ( !in.nextLine().equals("FileE")) {
-			return false;
-		}
-		return true;
 	}
 
 }
+
+/**
+ * 专为连续的文件读取而包装的类<br>
+ * <br>
+ * 包装解决next对象后不换行的问题<br>
+ * @author Jeremie
+ *
+ */
+class Read{
+	private Boolean lastIsLine;
+	private Scanner inHandle;
+	/**
+	 * 初始化构造
+	 * @param in 要包装的Scanner对象
+	 */
+	public Read( Scanner in ) {
+		// 初始化为true避免第一次读取既排空回车
+		lastIsLine = true;
+		inHandle = in;
+	}
+	/**
+	 * 初始化构造
+	 * @param inFile File对象
+	 * @throws FileNotFoundException
+	 */
+	public Read(File inFile) throws FileNotFoundException {
+		this(new Scanner(inFile));
+	}
+	/**
+	 * 获取下一个Line
+	 * @return 正确完成返回下一个Line
+	 * @throws Exception 如果 无法读取 或 排空回车时出现异常 或 已经关闭，抛出异常<br>
+	 * 【排空回车时出现异常则说明有外部修改或内部错误】<br>
+	 */
+	public String nextLine() throws Exception {
+		if (inHandle==null) {
+			throw new Exception("Read Object Be Closed.");
+		}
+		if (!lastIsLine) {
+			if (!inHandle.hasNextLine()) {
+				throw new Exception("Read Error.");
+			}
+			if (!inHandle.nextLine().isEmpty()) {
+				throw new Exception("This mast be empty.");
+			}
+			lastIsLine = true;
+		}
+		if (!inHandle.hasNextLine()) {
+			throw new Exception("Read Error.");
+		}
+		return inHandle.nextLine();
+	}
+	/**
+	 * 读取下一个int
+	 * @return 成功则返回
+	 * @throws Exception 无法读取 或 已经关闭 抛异常
+	 */
+	public int nextInt() throws Exception {
+		if (inHandle==null) {
+			throw new Exception("Read Object Be Closed.");
+		}
+		lastIsLine = false;
+		if (!inHandle.hasNextInt()) {
+			throw new Exception("Read Error.");
+		}
+		return inHandle.nextInt();
+	}
+	/**
+	 * 读取下一个Long
+	 * @return 成功则返回
+	 * @throws Exception 无法读取 或 已经关闭 抛异常
+	 */
+	public Long nextLong() throws Exception {
+		if (inHandle==null) {
+			throw new Exception("Read Object Be Closed.");
+		}
+		lastIsLine = false;
+		if (!inHandle.hasNextLong()) {
+			throw new Exception("Read Error.");
+		}
+		return inHandle.nextLong();
+	}
+	/**
+	 * 读取下一个Double
+	 * @return 成功则返回
+	 * @throws Exception 无法读取 或 已经关闭 抛异常
+	 */
+	public Double nextDouble() throws Exception {
+		if (inHandle==null) {
+			throw new Exception("Read Object Be Closed.");
+		}
+		lastIsLine = false;
+		if (!inHandle.hasNextDouble()) {
+			throw new Exception("Read Error.");
+		}
+		return inHandle.nextDouble();
+	}
+	/**
+	 * 读取下一个Boolean
+	 * @return 成功则返回
+	 * @throws Exception 无法读取 或 已经关闭 抛异常
+	 */
+	public Boolean nextBoolean() throws Exception {
+		if (inHandle==null) {
+			throw new Exception("Read Object Be Closed.");
+		}
+		lastIsLine = false;
+		if (!inHandle.hasNextBoolean()) {
+			throw new Exception("Read Error.");
+		}
+		return inHandle.nextBoolean();
+	}
+	/**
+	 * 安全关闭并析构对象<br>
+	 * 在使用该方法后请停止使用该对象并设置到此对象的引用为null<br>
+	 * @throws Throwable
+	 */
+	public void close() {
+		this.inHandle.close();
+		inHandle = null;
+	}
+	/**
+	 * 重载析构函数
+	 */
+	@Override
+	protected void finalize() throws Throwable {
+		this.inHandle.close();
+		inHandle = null;
+		super.finalize();
+	}
+}
+
+
+
