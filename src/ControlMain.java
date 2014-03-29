@@ -68,7 +68,8 @@ public class ControlMain {
 	// TO DO 在DVD类使用设置租买限制时，要添加一个可设置限制的DVDadd
 	
 	/**
-	 * 添加一个DVD，附带完整DVD参数
+	 * 添加一个DVD，附带完整DVD参数<br>
+	 * 根据title和year判断重复<br>
 	 * @param title
 	 * @param year
 	 * @param style	
@@ -77,21 +78,31 @@ public class ControlMain {
 	 * @param rent
 	 * @param buyPrice
 	 * @param rentPrice
+	 * @return 没有查到重复既添加成功返回true
 	 */
-	public void addDVD(String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
+	public boolean addDVD(String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyPrice, double rentPrice) {
+		// 查重
+		for (DVD a : this.dVDMainDateArrayList) {
+			if ( a.getTitle().equals(title) && a.getYear() == year ) {
+				return false;
+			}
+		}
 		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, buyPrice, rentPrice));
+		return true;
 	}
 	
 	/**
-	 * 添加一个DVD，自动计算是否可租可卖，自动计算风格
+	 * 添加一个DVD，自动计算是否可租可卖，自动计算风格<br>
+	 * 根据title和year判断重复<br>
 	 * @param title
 	 * @param year
 	 * @param style	以空格分离的风格字串 如为空字串或为null则自动为空
 	 * @param amount
 	 * @param buyPrice
 	 * @param rentPrice
+	 * @return 没有查到重复既添加成功返回true
 	 */
-	public void addDVD(String title, int year, String style, int amount, double buyPrice, double rentPrice) {
+	public Boolean addDVD(String title, int year, String style, int amount, double buyPrice, double rentPrice) {
 		boolean sell;
 		if (amount > DVD.getSELL_LIMIT()) {
 			sell = true;
@@ -113,19 +124,34 @@ public class ControlMain {
 				}
 			}
 		}
+		// 查重
+		for (DVD a : this.dVDMainDateArrayList) {
+			if ( a.getTitle().equals(title) && a.getYear() == year ) {
+				return false;
+			}
+		}
 		dVDMainDateArrayList.add( new DVD(title, year, tAL, amount, sell, rent, buyPrice, rentPrice));
+		return true;
 	}
 
 	/**
-	 * 添加一个DVD，自动计算是否可租可卖
+	 * 添加一个DVD，自动计算是否可租可卖<br>
+	 * 根据title和year判断重复<br>
 	 * @param title
 	 * @param year
 	 * @param style	
 	 * @param amount
 	 * @param buyPrice
 	 * @param rentPrice
+	 * @return 没有查到重复既添加成功返回true
 	 */
-	public void addDVD(String title, int year, ArrayList<Long> style, int amount, double buyPrice, double rentPrice) {
+	public boolean addDVD(String title, int year, ArrayList<Long> style, int amount, double buyPrice, double rentPrice) {
+		// 查重
+		for (DVD a : this.dVDMainDateArrayList) {
+			if ( a.getTitle().equals(title) && a.getYear() == year ) {
+				return false;
+			}
+		}
 		boolean sell;
 		if (amount > DVD.getSELL_LIMIT()) {
 			sell = true;
@@ -139,6 +165,7 @@ public class ControlMain {
 			rent = false;
 		}
 		dVDMainDateArrayList.add( new DVD(title, year, style, amount, sell, rent, buyPrice, rentPrice));
+		return false;
 	}
 	
 	/**
@@ -159,7 +186,7 @@ public class ControlMain {
 	/**
 	 * 添加一个Style
 	 * @param name
-	 * @return 返回ID
+	 * @return 返回ID 重名则返回已有对象ID
 	 */
 	public long addStyleRID(String name){
 		for (Style a : this.dVDStyleArrayList) {
@@ -226,12 +253,19 @@ public class ControlMain {
 	/**
 	 * 添加一个用户<br>
 	 * 并初始化现金额度<br>
+	 * 以name判断重复<br>
 	 * @param money
 	 * @param name
-	 * @return dVDMainDateArrayList句柄为null时返回false
+	 * @return dVDMainDateArrayList句柄为null 或 重复 返回false
 	 */
 	public boolean addOneUser(String name, String password, double money) {
 		if (this.dVDMainDateArrayList != null) {
+			// 查重
+			for (User a : this.usersMainDateArrayList) {
+				if (a.getName().equals(name)) {
+					return false;
+				}
+			}
 			usersMainDateArrayList.add(new User(name, password, money, this.dVDMainDateArrayList));
 			return true;
 		} else {
