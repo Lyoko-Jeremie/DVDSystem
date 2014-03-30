@@ -9,18 +9,19 @@ import java.util.Scanner;
 public class Test {
 
 	public static void main(String[] args) {
+		// 启动范例
 		Scanner in = new Scanner(System.in);
-//		ControlMain Test = new ControlMain();
 		Menu a = new Menu();
-//		Menu b = new Menu();
 		a.mainMenu(in);
-		
 		in.close();
-
 	}
 	
+	/**
+	 * 开发用初始化函数
+	 * @param TR ControlMain句柄
+	 */
 	public static void init( ControlMain TR ) {
-		TR.addOneUser("", "", Integer.MAX_VALUE);
+//		TR.addOneUser("", "", Integer.MAX_VALUE);
 		// TR.addStyle("爱情");
 		// TR.addStyle("喜剧");
 		// TR.addStyle("校园");
@@ -85,6 +86,31 @@ public class Test {
 //		TR.addDVD("西北偏北", 1959, "动作 冒险 剧情 神秘 爱情 惊怵", 1000, 100, 100);
 //		TR.addDVD("城市之光", 1931, "喜剧 剧情 爱情", 1000, 100, 100);
 //		TR.addDVD("千与千寻", 2001, "动画 冒险 家庭 奇幻", 1000, 100, 100);
+//		TR.addDVD("公民凯恩", 1941, "剧情 神秘", 1000, 100, 100);
+//		TR.addDVD("闪灵", 1980, "恐怖 神秘 惊怵", 1000, 100, 100);
+//		TR.addDVD("摩登时代", 1936, "", 1000, 100, 100);
+//		TR.addDVD("美国丽人", 1999, "剧情", 1000, 100, 100);
+//		TR.addDVD("出租车司机", 1976, "剧情 惊怵", 1000, 100, 100);
+//		TR.addDVD("迷魂记", 1958, "犯罪 神秘 爱情 惊怵", 1000, 100, 100);
+//		TR.addDVD("玩具总动员3", 2010, "动画 冒险", 1000, 100, 100);
+//		TR.addDVD("钢琴家", 2003, "剧情 战争", 1000, 100, 100);
+//		TR.addDVD("无间行者", 2006, "犯罪 惊怵", 1000, 100, 100);
+//		TR.addDVD("回到未来", 1985, "冒险 科幻", 1000, 100, 100);
+//		TR.addDVD("M就是凶手", 1931, "犯罪 惊怵", 1000, 100, 100);
+//		TR.addDVD("光荣之路", 1957, "剧情 战争", 1000, 100, 100);
+//		TR.addDVD("双重赔偿", 1944, "犯罪", 1000, 100, 100);
+//		TR.addDVD("异形2", 1986, "科幻 惊怵", 1000, 100, 100);
+//		TR.addDVD("美丽人生", 1998, "剧情 爱情", 1000, 100, 100);
+//		TR.addDVD("机器人总动员", 2008, "动画 科幻", 1000, 100, 100);
+//		TR.addDVD("他人的生活", 2006, "剧情 惊怵", 1000, 100, 100);
+//		TR.addDVD("发条橙", 1972, "犯罪 剧情", 1000, 100, 100);
+//		TR.addDVD("天使艾美丽", 2001, "喜剧", 1000, 100, 100);
+//		TR.addDVD("杀死一只知更鸟", 1962, "犯罪", 1000, 100, 100);
+//		TR.addDVD("阿拉伯的劳伦斯", 1963, "冒险", 1000, 100, 100);
+//		TR.addDVD("角斗士", 2000, "动作", 1000, 100, 100);
+//		TR.addDVD("绿里奇迹", 1999, "犯罪", 1000, 100, 100);
+//		TR.addDVD("致命魔术", 2006, "惊怵", 1000, 100, 100);
+//		TR.addDVD("大独裁者", 1941, "喜剧", 1000, 100, 100);
 		// TR.addDVD("", , "", 1000, 100, 100);
 		
 //		{
