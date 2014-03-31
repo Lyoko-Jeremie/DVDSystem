@@ -56,10 +56,7 @@ public class Menu {
 	 * @param in	控制台Scanner对象
 	 */
 	public void mainMenu( Scanner in){
-		
-//		{
-//			Test.init(mainDate);
-//		}
+	
 		
 		
 		// 初始化&启动提示
@@ -76,11 +73,21 @@ public class Menu {
 		Toolz.println("欢迎进入DVD租买系统");
 		
 		
+		{
+			Test.init(mainDate);
+		}
 		
 		
 		// 现在只是有用户界面，这个位置为扩展管理界面而预留
-		this.userMenuHandle = new UserMenu(mainDate, "");
-		this.userMenuHandle.menu(in);
+		{
+			try {
+				this.userMenuHandle = new UserMenu(mainDate, "");
+				this.userMenuHandle.menu(in);
+			} catch (ExceptionInInitializerError e) {
+				Toolz.println("内部错误.");
+				return; 
+			}
+		}
 		
 		
 		
@@ -150,10 +157,11 @@ class UserMenu{
 	
 	/**
 	 * 构造函数
-	 * @param mainDate
-	 * @param userName
+	 * @param mainDate	主系统句柄
+	 * @param userName	用户名
+	 * @throws 找不到用户 或 主系统句柄为null 抛异常
 	 */
-	public UserMenu(ControlMain mainDate, String userName) {
+	public UserMenu(ControlMain mainDate, String userName) throws ExceptionInInitializerError {
 //		if ( UserMenu.PRO>0) {
 //			// 反多对象保护
 //			throw new ExceptionInInitializerError(
@@ -162,7 +170,13 @@ class UserMenu{
 //		}
 //		++UserMenu.PRO;
 		this.mainDate = mainDate;
+		if (this.mainDate == null) {
+			throw new ExceptionInInitializerError("Control Main Handle is null.");
+		}
 		this.userHandle = mainDate.getUser(userName);
+		if (this.userHandle == null) {
+			throw new ExceptionInInitializerError("Cannot found the user.");
+		}
 	}
 	
 //	/**
@@ -265,8 +279,9 @@ class UserMenu{
 	
 	/**
 	 * 用户菜单菜单选择界面
+	 * @throws Exception 
 	 */
-	private void MainU(){
+	private void MainU() {
 		Toolz.println();
 //		Toolz.println("Test, These is Menu Text.");
 		Toolz.println("欢迎 " + this.userHandle.getName() + " 来到用户菜单");

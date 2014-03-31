@@ -398,13 +398,13 @@ public class ControlMain {
 	
 	/**
 	 * 添加DVD对象到主数据链<br>
-	 * 以title和id判断相同<br>
+	 * 以title和year判断相同<br>
 	 * @param dbject
 	 * @return	 没有重复则添加成功返回true
 	 */
 	public boolean addDVD(DVD dbject) {
 		for (DVD a : dVDMainDateArrayList) {
-			if (a.getTitle().equals(dbject.getTitle()) && a.getID() == dbject.getID() ) {
+			if (a.getTitle().equals(dbject.getTitle()) && a.getYear() == dbject.getYear() ) {
 				return false;
 			}
 		}
@@ -414,13 +414,13 @@ public class ControlMain {
 	
 	/**
 	 * 添加User对象到主数据链<br>
-	 * 以name和password判断重复<br>
+	 * 以name判断重复<br>
 	 * @param ubject
 	 * @return	 没有重复则添加成功返回true
 	 */
 	public boolean addUser(User ubject) {
 		for (User a : usersMainDateArrayList) {
-			if (a.getName().equals(ubject.getName()) && a.getPassword().equals(ubject.getPassword()) ) {
+			if (a.getName().equals(ubject.getName()) ) {
 				return false;
 			}
 		}
@@ -430,13 +430,13 @@ public class ControlMain {
 	
 	/**
 	 * 添加Style对象到主数据链<br>
-	 * 以name和id判断重复<br>
+	 * 以name判断重复<br>
 	 * @param sbject
 	 * @return 没有重复则添加成功返回true
 	 */
 	public boolean addStyle(Style sbject) {
 		for (Style a : dVDStyleArrayList) {
-			if (a.getName().equals(sbject.getName()) && a.getID() == sbject.getID()) {
+			if ( a.getName().equals(sbject.getName()) ) {
 				return false;
 			}
 		}
