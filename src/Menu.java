@@ -254,7 +254,6 @@ class UserMenu{
 
 			case 0:
 				{
-					// TO DO 文件保存
 					Toolz.println("您已经退出用户菜单.");
 					return;
 				}
@@ -380,7 +379,7 @@ class UserMenu{
 			if (Temp.getTitle().equals(userHandle.getDVDListIndexName(i))) {
 				Toolz.print( i + ") " + getDVDFormartBaseInform(Temp) );
 				if (userHandle.getDVDListIndexBuyAmount(i) > 0) {
-					Toolz.print( "已买数量：" + userHandle.getDVDListIndexBuyAmount(i) );
+					Toolz.print( "已买数量：" + userHandle.getDVDListIndexBuyAmount(i) + " ; ");
 				}
 				if (userHandle.getDVDListIndexRentAmount(i) > 0) {
 					Toolz.print( "已租数量：" + userHandle.getDVDListIndexRentAmount(i) );
@@ -518,7 +517,7 @@ class UserMenu{
 			}
 		}
 		if (notHaveDvd) {
-			Toolz.println("您尚未拥有DVD.");
+			Toolz.println("您尚未租DVD.");
 			return;
 		}
 		Toolz.println("以DVD名退选1\t以DVD在主列表中的编号退选2\t以DVD在用户已借列表中的编号退选3\n请选择并回车【有的名字可能搜索不到】");

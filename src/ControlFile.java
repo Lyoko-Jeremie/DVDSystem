@@ -270,6 +270,7 @@ public class ControlFile {
 			throw new Exception("Read Error.");
 		}
 		// String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double byprice, double rentPrice, int rentAmount
+		// 为填充构造函数做准备
 		String title = in.nextLine();
 		long iD = in.nextLong();
 		int year = in.nextInt();
@@ -281,7 +282,7 @@ public class ControlFile {
 		boolean rent = in.nextBoolean();
 		if ( !in.nextLine().equals("DVDObjectSB")) {
 			throw new Exception("Read Error.");
-		}
+		}	// 为类型数组做准备
 		ArrayList<Long> style = new ArrayList<Long>();
 		int iTemp = in.nextInt();
 		for (int i = 0; i < iTemp; i++) {
@@ -335,6 +336,7 @@ public class ControlFile {
 		if ( !in.nextLine().equals("StyleObjectB")) {
 			throw new Exception("Read Error.");
 		}
+		// 为填充构造函数做准备
 		String name;
 		Long iD;
 		name = in.nextLine();
@@ -398,6 +400,7 @@ public class ControlFile {
 		if ( !in.nextLine().equals("UserObjectB")) {
 			throw new Exception("Read Error.");
 		}
+		// 为填充构造函数做准备
 		String name;
 		String password;
 		double money;
