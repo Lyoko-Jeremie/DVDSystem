@@ -1,3 +1,4 @@
+package Core;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +62,8 @@ public class ControlMain {
 	 * 析构<br>
 	 * 减少计数
 	 */
-	protected void finalize() {
+	@Override
+	public void finalize() {
 		--ControlMain.PRO;
 	}
 	
@@ -279,7 +281,7 @@ public class ControlMain {
 	 * @param Index	下标
 	 * @return	超出范围返回null
 	 */
-	public User getUser(int Index) {
+	protected User getUser(int Index) {
 		try {
 			return this.usersMainDateArrayList.get(Index);
 		} catch (Exception e) {
@@ -312,7 +314,7 @@ public class ControlMain {
 	 * @param Index	下标
 	 * @return	超出范围返回null
 	 */
-	public DVD getDVD(int Index) {
+	protected DVD getDVD(int Index) {
 		try {
 			return this.dVDMainDateArrayList.get(Index);
 		} catch (Exception e) {
@@ -402,7 +404,7 @@ public class ControlMain {
 	 * @param dbject
 	 * @return	 没有重复则添加成功返回true
 	 */
-	public boolean addDVD(DVD dbject) {
+	protected boolean addDVD(DVD dbject) {
 		for (DVD a : dVDMainDateArrayList) {
 			if (a.getTitle().equals(dbject.getTitle()) && a.getYear() == dbject.getYear() ) {
 				return false;
@@ -418,7 +420,7 @@ public class ControlMain {
 	 * @param ubject
 	 * @return	 没有重复则添加成功返回true
 	 */
-	public boolean addUser(User ubject) {
+	protected boolean addUser(User ubject) {
 		for (User a : usersMainDateArrayList) {
 			if (a.getName().equals(ubject.getName()) ) {
 				return false;
@@ -434,7 +436,7 @@ public class ControlMain {
 	 * @param sbject
 	 * @return 没有重复则添加成功返回true
 	 */
-	public boolean addStyle(Style sbject) {
+	protected boolean addStyle(Style sbject) {
 		for (Style a : dVDStyleArrayList) {
 			if ( a.getName().equals(sbject.getName()) ) {
 				return false;

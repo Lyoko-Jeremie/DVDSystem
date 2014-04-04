@@ -1,3 +1,4 @@
+package Core;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +38,72 @@ public class User {
 	 */
 	private ArrayList<DVD> dateHandle;
 	
+	
+	
+	
+	
+	/**
+	 * User记录用DVD类<br>
+	 * 内部类，无需且禁止外部使用<br>
+	 * @author Jeremie
+	 *
+	 */
+	private class DVDUser {
+		/**
+		 * DVD名<br>
+		 * 以名字为鉴别<br>
+		 * <br>
+		 * <br>
+		 * 以DVD的ID&name为鉴别<br>
+		 * 
+		 */
+		private String name;
+		/**
+		 * DVD的ID
+		 */
+		private long ID;
+		/**
+		 * 已经借的数量
+		 */
+		public int rentAmount = 0;
+		/**
+		 * 已经买的数量
+		 */
+		public int buyAmount = 0;
+		
+		/**
+		 * 构造函数
+		 * @param name
+		 * @param ID	对应DVD的ID
+		 * @param rentAmount
+		 * @param buyAmount
+		 */
+		public DVDUser(String name, long ID, int rentAmount, int buyAmount) {
+			this.name = name;
+			this.rentAmount = rentAmount;
+			this.buyAmount = buyAmount;
+			this.ID = ID;
+		}
+	
+		/**
+		 * @return name
+		 */
+		public String getName() {
+			return name;
+		}
+	
+		/**
+		 * @return iD
+		 */
+		public long getID() {
+			return ID;
+		}
+		
+		
+	}
+
+
+	
 	/**
 	 * 构造函数<br>
 	 * <br>
@@ -45,7 +112,7 @@ public class User {
 	 * @param money	初始金额
 	 * @param handle	指向主数据链的句柄
 	 */
-	public User(double money, ArrayList<DVD> handle) {
+	protected User(double money, ArrayList<DVD> handle) {
 		this.name = null;
 		this.password = null;
 		this.userDVDArrayList = new ArrayList<DVDUser>();
@@ -63,7 +130,7 @@ public class User {
 	 * @param money
 	 * @param DVDhandle
 	 */
-	public User(String name, String password, double money, 	ArrayList<DVD> DVDhandle) {
+	protected User(String name, String password, double money, 	ArrayList<DVD> DVDhandle) {
 		this.name = name;
 		this.password = password;
 		this.userDVDArrayList = new ArrayList<DVDUser>();
@@ -361,7 +428,7 @@ public class User {
 	 * @param buyAmount
 	 * @return bool
 	 */
-	public boolean addSelfsDVDDate(String name, long ID, int rentAmount, int buyAmount) {
+	protected boolean addSelfsDVDDate(String name, long ID, int rentAmount, int buyAmount) {
 		for (DVDUser a : this.userDVDArrayList) {	// 数据有效性互斥约束
 			if (a.getName().equals(name)) {
 				return false;
@@ -387,64 +454,4 @@ public class User {
 
 
 
-
-
-/**
- * User记录用DVD类<br>
- * @author Jeremie
- *
- */
-class DVDUser {
-	/**
-	 * DVD名<br>
-	 * 以名字为鉴别<br>
-	 * <br>
-	 * <br>
-	 * 以DVD的ID&name为鉴别<br>
-	 * 
-	 */
-	private String name;
-	/**
-	 * DVD的ID
-	 */
-	private long ID;
-	/**
-	 * 已经借的数量
-	 */
-	public int rentAmount = 0;
-	/**
-	 * 已经买的数量
-	 */
-	public int buyAmount = 0;
-	
-	/**
-	 * 构造函数
-	 * @param name
-	 * @param ID	对应DVD的ID
-	 * @param rentAmount
-	 * @param buyAmount
-	 */
-	public DVDUser(String name, long ID, int rentAmount, int buyAmount) {
-		this.name = name;
-		this.rentAmount = rentAmount;
-		this.buyAmount = buyAmount;
-		this.ID = ID;
-	}
-
-	/**
-	 * @return name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return iD
-	 */
-	public long getID() {
-		return ID;
-	}
-	
-	
-}
 

@@ -1,3 +1,4 @@
+package Core;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,12 +27,151 @@ public class ControlFile {
 	
 	public static final String[] FILE_VERSION_STRINGS = { "DVDSystemFileDateBase" , "DateBaseVersion:v1.0" };
 	
+	
+
+	/**
+	 * 专为连续的文件读取而包装的类<br>
+	 * 内部类，无需且禁止外部使用<br>
+	 * 包装解决next对象后不换行的问题<br>
+	 * @author Jeremie
+	 *
+	 */
+	private class Read{
+		private Boolean lastIsLine;
+		private Scanner inHandle;
+		/**
+		 * 初始化构造
+		 * @param in 要包装的Scanner对象
+		 */
+		protected Read( Scanner in ) {
+			// 初始化为true避免第一次读取既排空回车
+			lastIsLine = true;
+			inHandle = in;
+		}
+		/**
+		 * 初始化构造
+		 * @param inFile File对象
+		 * @throws FileNotFoundException
+		 */
+		protected Read(File inFile) throws FileNotFoundException {
+			this(new Scanner(inFile));
+		}
+		/**
+		 * 获取下一个Line
+		 * @return 正确完成返回下一个Line
+		 * @throws Exception 如果 无法读取 或 排空回车时出现异常 或 已经关闭，抛出异常<br>
+		 * 【排空回车时出现异常则说明有外部修改或内部错误】<br>
+		 */
+		protected String nextLine() throws Exception {
+			if (inHandle==null) {
+				throw new Exception("Read Object Be Closed.");
+			}
+			if (!lastIsLine) {
+				if (!inHandle.hasNextLine()) {
+					throw new Exception("Read Error.");
+				}
+				if (!inHandle.nextLine().isEmpty()) {
+					throw new Exception("This mast be empty.");
+				}
+				lastIsLine = true;
+			}
+			if (!inHandle.hasNextLine()) {
+				throw new Exception("Read Error.");
+			}
+			return inHandle.nextLine();
+		}
+		/**
+		 * 读取下一个int
+		 * @return 成功则返回
+		 * @throws Exception 无法读取 或 已经关闭 抛异常
+		 */
+		protected int nextInt() throws Exception {
+			if (inHandle==null) {
+				throw new Exception("Read Object Be Closed.");
+			}
+			lastIsLine = false;
+			if (!inHandle.hasNextInt()) {
+				throw new Exception("Read Error.");
+			}
+			return inHandle.nextInt();
+		}
+		/**
+		 * 读取下一个Long
+		 * @return 成功则返回
+		 * @throws Exception 无法读取 或 已经关闭 抛异常
+		 */
+		protected Long nextLong() throws Exception {
+			if (inHandle==null) {
+				throw new Exception("Read Object Be Closed.");
+			}
+			lastIsLine = false;
+			if (!inHandle.hasNextLong()) {
+				throw new Exception("Read Error.");
+			}
+			return inHandle.nextLong();
+		}
+		/**
+		 * 读取下一个Double
+		 * @return 成功则返回
+		 * @throws Exception 无法读取 或 已经关闭 抛异常
+		 */
+		protected Double nextDouble() throws Exception {
+			if (inHandle==null) {
+				throw new Exception("Read Object Be Closed.");
+			}
+			lastIsLine = false;
+			if (!inHandle.hasNextDouble()) {
+				throw new Exception("Read Error.");
+			}
+			return inHandle.nextDouble();
+		}
+		/**
+		 * 读取下一个Boolean
+		 * @return 成功则返回
+		 * @throws Exception 无法读取 或 已经关闭 抛异常
+		 */
+		protected Boolean nextBoolean() throws Exception {
+			if (inHandle==null) {
+				throw new Exception("Read Object Be Closed.");
+			}
+			lastIsLine = false;
+			if (!inHandle.hasNextBoolean()) {
+				throw new Exception("Read Error.");
+			}
+			return inHandle.nextBoolean();
+		}
+		/**
+		 * 安全关闭并析构对象<br>
+		 * 在使用该方法后请停止使用该对象并设置到此对象的引用为null<br>
+		 * @throws Throwable
+		 */
+		protected void close() {
+			this.inHandle.close();
+			inHandle = null;
+		}
+		/**
+		 * 重载析构函数
+		 */
+		@Override
+		protected void finalize() throws Throwable {
+			this.inHandle.close();
+			inHandle = null;
+			super.finalize();
+		}
+	}
+
+
+	
+	
+	
+	
+	
 	/**
 	 * 构造函数
 	 * @param filePathName
 	 * @param mainDate
 	 */
-	public ControlFile( String filePathName, ControlMain mainDate) throws ExceptionInInitializerError {
+	protected ControlFile( String filePathName, ControlMain mainDate) throws ExceptionInInitializerError {
 		this.mainDate = mainDate;
 		if (  this.mainDate == null) {
 			throw new ExceptionInInitializerError("ControlMain Handle Cant Are null.");
@@ -51,7 +191,7 @@ public class ControlFile {
 	 * 文件是否存在
 	 * @return bool
 	 */
-	public boolean isFileExists() {
+	protected boolean isFileExists() {
 		return mainFile.exists();
 	}
 	
@@ -59,7 +199,7 @@ public class ControlFile {
 	 * 创建新文件
 	 * @return 异常返回false 成功返回true
 	 */
-	public boolean createNewFile() {
+	protected boolean createNewFile() {
 		try {
 			mainFile.createNewFile();
 		} catch (IOException e) {
@@ -88,7 +228,7 @@ public class ControlFile {
 	/**
 	 * 关闭读文件句柄
 	 */
-	public void closeReadHandle() {
+	protected void closeReadHandle() {
 		if ( mainReadHandle != null ) {
 			mainReadHandle.close();
 			mainReadHandle = null;
@@ -98,7 +238,7 @@ public class ControlFile {
 	/**
 	 * 关闭写文件句柄
 	 */
-	public void closeWriteHandle() {
+	protected void closeWriteHandle() {
 		if ( mainWriteHandle != null ) {
 			mainWriteHandle.close();
 			mainWriteHandle = null;
@@ -109,7 +249,7 @@ public class ControlFile {
 	 * 打开读取用文件句柄
 	 * @return bool
 	 */
-	public boolean openReadHandle() {
+	protected boolean openReadHandle() {
 		if (mainReadHandle == null) {
 			try {
 				mainReadHandle = new Read(mainFile);
@@ -124,7 +264,7 @@ public class ControlFile {
 	 * 读取用文件句柄是否打开
 	 * @return bool
 	 */
-	public boolean isOpenReadHandle() {
+	protected boolean isOpenReadHandle() {
 		if ( mainReadHandle == null ) {
 			return false;
 		}
@@ -135,7 +275,7 @@ public class ControlFile {
 	 * 读取下一行
 	 * @return	句柄为null or 没有下一行 则返回 null
 	 */
-	public String readNextLN() {
+	protected String readNextLN() {
 		if ( mainReadHandle != null) {
 			try {
 				return mainReadHandle.nextLine();
@@ -150,7 +290,7 @@ public class ControlFile {
 	 * 读取下一个int
 	 * @return	句柄为null or 没有下一个int 则返回 null
 	 */
-	public Integer readNextInt() {
+	protected Integer readNextInt() {
 		if ( mainReadHandle != null ) {
 			try {
 				return mainReadHandle.nextInt();
@@ -165,7 +305,7 @@ public class ControlFile {
 	 * 打开写入用文件句柄
 	 * @return bool
 	 */
-	public boolean openWriteHandle() {
+	protected boolean openWriteHandle() {
 		if (mainWriteHandle == null) {
 			try {
 				mainWriteHandle = new PrintWriter(mainFile);
@@ -180,7 +320,7 @@ public class ControlFile {
 	 * 写入用文件句柄是否打开
 	 * @return bool
 	 */
-	public boolean isOpenWriteHandle() {
+	protected boolean isOpenWriteHandle() {
 		if ( mainWriteHandle == null ) {
 			return false;
 		}
@@ -193,21 +333,21 @@ public class ControlFile {
 	 * @param line	
 	 * @return 句柄为空返回null
 	 */
-	public boolean writeNextLN( String line) {
+	protected boolean writeNextLN( String line) {
 		if ( mainWriteHandle != null ) {
 			mainWriteHandle.println(line);
 			return true;
 		}
 		return false;
 	}
-	public boolean writeNextLN( int line) {
+	protected boolean writeNextLN( int line) {
 		if ( mainWriteHandle != null ) {
 			mainWriteHandle.println(line);
 			return true;
 		}
 		return false;
 	}
-	public boolean writeNextLN() {
+	protected boolean writeNextLN() {
 		if ( mainWriteHandle != null ) {
 			mainWriteHandle.println();
 			return true;
@@ -220,7 +360,7 @@ public class ControlFile {
 	 * @param dbject
 	 * @return 句柄为null返回null
 	 */
-	public boolean writeDVD(DVD dbject) {
+	protected boolean writeDVD(DVD dbject) {
 		if ( mainWriteHandle == null ) {
 			return false;
 		}
@@ -258,7 +398,7 @@ public class ControlFile {
 	 * @return DVD对象
 	 * @throws Exception
 	 */
-	public DVD readDVD() throws Exception {
+	protected DVD readDVD() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -302,7 +442,7 @@ public class ControlFile {
 	 * @param sbject
 	 * @return	句柄为null返回null
 	 */
-	public boolean writeStyle(Style sbject) {
+	protected boolean writeStyle(Style sbject) {
 		if ( mainWriteHandle == null ) {
 			return false;
 		}
@@ -325,7 +465,7 @@ public class ControlFile {
 	 * @return Style对象
 	 * @throws Exception
 	 */
-	public Style readStyle() throws Exception {
+	protected Style readStyle() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -356,7 +496,7 @@ public class ControlFile {
 	 * @param ubject
 	 * @return	句柄为null返回null
 	 */
-	public boolean writeUser(User ubject) {
+	protected boolean writeUser(User ubject) {
 		if ( mainWriteHandle == null ) {
 			return false;
 		}
@@ -389,7 +529,7 @@ public class ControlFile {
 	 * @return	User对象
 	 * @throws Exception
 	 */
-	public User readUser() throws Exception {
+	protected User readUser() throws Exception {
 		if ( mainReadHandle == null ) {
 			throw new Exception("Read Handle is null.");
 		}
@@ -438,7 +578,7 @@ public class ControlFile {
 	 * 写入整个ControlMain对象所有数据
 	 * @return	只有完全写入完成才返回true
 	 */
-	public boolean writeMainDate() {
+	protected boolean writeMainDate() {
 		if ( mainWriteHandle == null ) {
 			return false;
 		}
@@ -494,7 +634,7 @@ public class ControlFile {
 	 * 读取整个文件所有数据并追加到主数据中<br>
 	 * @return 正常完成读取返回true 任何的读取失败返回false
 	 */
-	public boolean readMainDate() {
+	protected boolean readMainDate() {
 		try {
 			if ( mainReadHandle == null) {
 				return false;
@@ -582,136 +722,11 @@ public class ControlFile {
 
 }
 
-/**
- * 专为连续的文件读取而包装的类<br>
- * <br>
- * 包装解决next对象后不换行的问题<br>
- * @author Jeremie
- *
- */
-class Read{
-	private Boolean lastIsLine;
-	private Scanner inHandle;
-	/**
-	 * 初始化构造
-	 * @param in 要包装的Scanner对象
-	 */
-	public Read( Scanner in ) {
-		// 初始化为true避免第一次读取既排空回车
-		lastIsLine = true;
-		inHandle = in;
-	}
-	/**
-	 * 初始化构造
-	 * @param inFile File对象
-	 * @throws FileNotFoundException
-	 */
-	public Read(File inFile) throws FileNotFoundException {
-		this(new Scanner(inFile));
-	}
-	/**
-	 * 获取下一个Line
-	 * @return 正确完成返回下一个Line
-	 * @throws Exception 如果 无法读取 或 排空回车时出现异常 或 已经关闭，抛出异常<br>
-	 * 【排空回车时出现异常则说明有外部修改或内部错误】<br>
-	 */
-	public String nextLine() throws Exception {
-		if (inHandle==null) {
-			throw new Exception("Read Object Be Closed.");
-		}
-		if (!lastIsLine) {
-			if (!inHandle.hasNextLine()) {
-				throw new Exception("Read Error.");
-			}
-			if (!inHandle.nextLine().isEmpty()) {
-				throw new Exception("This mast be empty.");
-			}
-			lastIsLine = true;
-		}
-		if (!inHandle.hasNextLine()) {
-			throw new Exception("Read Error.");
-		}
-		return inHandle.nextLine();
-	}
-	/**
-	 * 读取下一个int
-	 * @return 成功则返回
-	 * @throws Exception 无法读取 或 已经关闭 抛异常
-	 */
-	public int nextInt() throws Exception {
-		if (inHandle==null) {
-			throw new Exception("Read Object Be Closed.");
-		}
-		lastIsLine = false;
-		if (!inHandle.hasNextInt()) {
-			throw new Exception("Read Error.");
-		}
-		return inHandle.nextInt();
-	}
-	/**
-	 * 读取下一个Long
-	 * @return 成功则返回
-	 * @throws Exception 无法读取 或 已经关闭 抛异常
-	 */
-	public Long nextLong() throws Exception {
-		if (inHandle==null) {
-			throw new Exception("Read Object Be Closed.");
-		}
-		lastIsLine = false;
-		if (!inHandle.hasNextLong()) {
-			throw new Exception("Read Error.");
-		}
-		return inHandle.nextLong();
-	}
-	/**
-	 * 读取下一个Double
-	 * @return 成功则返回
-	 * @throws Exception 无法读取 或 已经关闭 抛异常
-	 */
-	public Double nextDouble() throws Exception {
-		if (inHandle==null) {
-			throw new Exception("Read Object Be Closed.");
-		}
-		lastIsLine = false;
-		if (!inHandle.hasNextDouble()) {
-			throw new Exception("Read Error.");
-		}
-		return inHandle.nextDouble();
-	}
-	/**
-	 * 读取下一个Boolean
-	 * @return 成功则返回
-	 * @throws Exception 无法读取 或 已经关闭 抛异常
-	 */
-	public Boolean nextBoolean() throws Exception {
-		if (inHandle==null) {
-			throw new Exception("Read Object Be Closed.");
-		}
-		lastIsLine = false;
-		if (!inHandle.hasNextBoolean()) {
-			throw new Exception("Read Error.");
-		}
-		return inHandle.nextBoolean();
-	}
-	/**
-	 * 安全关闭并析构对象<br>
-	 * 在使用该方法后请停止使用该对象并设置到此对象的引用为null<br>
-	 * @throws Throwable
-	 */
-	public void close() {
-		this.inHandle.close();
-		inHandle = null;
-	}
-	/**
-	 * 重载析构函数
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		this.inHandle.close();
-		inHandle = null;
-		super.finalize();
-	}
-}
+
+
+
+
+
 
 
 

@@ -1,3 +1,4 @@
+package Core;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -79,7 +80,7 @@ public class DVD {
 	 * sellLimit = SELL_LIMIT<br>
 	 * rentLimit = RENT_LIMIT<br>
 	 */
-	public DVD() {
+	protected DVD() {
 		this.title = "";
 		this.year = 0;
 		this.style = new ArrayList<Long>();
@@ -108,7 +109,7 @@ public class DVD {
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public DVD( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
+	protected DVD( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -142,7 +143,7 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
+	protected void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -175,7 +176,7 @@ public class DVD {
 	 * @param rentPrice
 	 * @param rentAmount
 	 */
-	public DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
+	protected DVD( String title, long iD, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice, int rentAmount) {
 		this.title = title;
 		this.ID = iD;
 		this.year = year;
@@ -208,7 +209,7 @@ public class DVD {
 	 * @param buyprice
 	 * @param rentPrice
 	 */
-	public void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
+	protected void setAllDate( String title, int year, ArrayList<Long> style, int amount, boolean sell, boolean rent, double buyprice, double rentPrice) {
 		this.title = title;
 		this.year = year;
 		if (style != null) {
@@ -328,7 +329,7 @@ public class DVD {
 	/**
 	 * @return style	因为需要保护内部对象 返回的是临时对象 TMDjava虚拟机造成的内存泄漏和资源占用我就不管了
 	 */
-	public ArrayList<Long> styleGetAll() {
+	protected ArrayList<Long> styleGetAll() {
 		return new ArrayList<Long>(style);
 	}
 	/**
@@ -348,7 +349,7 @@ public class DVD {
 	 * @param style	不能为null
 	 * @throws Exception 
 	 */
-	public void styleSetALL(ArrayList<Long> style) throws Exception {
+	protected void styleSetALL(ArrayList<Long> style) throws Exception {
 		if (style == null) {
 			throw new Exception("Cant Are null.");
 		}

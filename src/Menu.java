@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Core.ControlMain;
+import Core.DVD;
+import Core.User;
+
 
 /**
  * 菜单<br>
@@ -72,9 +76,9 @@ public class Menu {
 		}
 		Toolz.println("欢迎进入DVD租买系统");
 		
-		
+		// TODO 开发期测试用初始化调用，记得注释
 		{
-			Test.init(mainDate);
+			Core.Test.init(mainDate);
 		}
 		
 		
@@ -663,6 +667,7 @@ class  Toolz {
 	 */
 	private Toolz() {
 		// 禁用构造函数
+		throw new ExceptionInInitializerError("Cant Constructor Toolz.");
 	}
 	
 	/**
