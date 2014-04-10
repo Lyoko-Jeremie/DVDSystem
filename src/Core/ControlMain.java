@@ -314,7 +314,7 @@ public class ControlMain {
 	 * @param Index	下标
 	 * @return	超出范围返回null
 	 */
-	protected DVD getDVD(int Index) {
+	public DVD getDVD(int Index) {
 		try {
 			return this.dVDMainDateArrayList.get(Index);
 		} catch (Exception e) {
@@ -351,7 +351,7 @@ public class ControlMain {
 	 * @param iD		名字
 	 * @return		找不到返回null
 	 */
-	public DVD getDVD(long iD) {
+	public DVD getDVD(Long iD) {
 		for (DVD a : this.dVDMainDateArrayList) {
 			if (a.getID() == iD) {
 				return a;
